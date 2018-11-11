@@ -8,7 +8,7 @@ namespace bob {
     public:
       Bob(float carbs, float glucose);
       ~Bob() = default;
-      void simulation();
+      void simulate();
 
       void set_initial_carbs(float carbs);
       float get_initial_carbs();

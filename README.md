@@ -42,11 +42,11 @@ make
 To uninstall, simply execute `$ rm -r <PROJECT_ROT>` and this will remove the files.
 
 ## Roadmap
-[x] - Get basic proof of concept up and running
-[ ] - Add support for modular bob's and other friends
-[ ] - Read biomedical data from a file and form a profile
-[ ] - Differentiate between having and not having diabetes
-[ ] - Return coherent data for machine learning layer
+- [x] - Get basic proof of concept up and running
+- [ ] - Add support for modular bob's and other friends
+- [ ] - Read biomedical data from a file and form a profile
+- [ ] - Differentiate between having and not having diabetes
+- [ ] - Return coherent data for machine learning layer
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](https://github.com/jparr721/Bob/blob/master/LICENSE) file for details.

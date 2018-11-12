@@ -14,6 +14,7 @@ Currently, this has been tested only on Linux 4.18.5+ and Ubuntu 16.04 LTS.
 - STDC++17
 - OpenMp 7+
 - Cuda 9+
+
 Supplied versions are what this system was tested on, and it may work on lower versions, but is not guaranteed.
 
 #### Arch Linux

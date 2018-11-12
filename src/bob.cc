@@ -1,4 +1,4 @@
-#include <bob/bob.hpp>
+#include <bob/bob.h>
 
 #include <cmath>
 #include <iostream>
@@ -28,9 +28,9 @@ namespace bob {
       float glycemic_index,
       int interval) {
     std::vector<float> concentrations(time / interval, 0);
-    for (int i = 0; i < time; ++i) {
-      if (i % interval == 0) {
-        concentrations.push_back(this->initial_carbs * std::exp(-glycemic_index * time));
+    for (int current_time = 0; current_time < time; ++current_time) {
+      if (current_time % interval == 0) {
+        concentrations.push_back(this->initial_carbs * std::exp(-glycemic_index * current_time));
       }
     }
 
@@ -46,11 +46,11 @@ namespace bob {
       int interval) {
     std::vector<float> concentrations(time / interval, 0);
     float diffusion_rate = (glycemic_index / insulin_release_rate - glycemic_index);
-    for (int i = 0; i < time; ++i) {
-      if (i % interval == 0) {
+    for (int current_time = 0; current_time < time; ++current_time) {
+      if (current_time % interval == 0) {
         concentrations.push_back(
             this->initial_carbs * diffusion_rate * (
-              std::exp(-glycemic_index * time) - std::exp(-insulin_release_rate * time)) + glucose);
+              std::exp(-glycemic_index * time) - std::exp(-insulin_release_rate * current_time)) + glucose);
       }
     }
 
@@ -77,13 +77,15 @@ namespace bob {
       int interval) {
     auto carbs = this->carbohydrate_diffusion(time, this->initial_carbs, glycemic_index, interval);
     auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval);
+    for (auto it = carbs.begin(); it != carbs.end(); ++it) std::cout << *it << std::endl;
 
     std::cout << "Carbohydrates over " << time << " min " << "Glucose over " << time << " min" << std::endl;
     int timestamp = 0;
 
     // Linearly scan and print our values
     for (auto it1 = carbs.begin(), it2 = glucose.begin(); it1 != carbs.end() && it2 != glucose.end(); ++it1, ++it2) {
-      std::cout << timestamp << " minutes: " << *it1 << timestamp << " minutes: " << *it2 << std::endl;
+      std::cout << timestamp << " minutes: " << *it1 << " " << timestamp << " minutes: " << *it2 << std::endl;
+      timestamp += interval;
     }
 
     return;

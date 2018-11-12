@@ -29,6 +29,7 @@ namespace bob {
           float carbs,
           float glycemic_index,
           int interval);
+
       std::vector<float> glucose_diffusion(
           int time,
           float carbs,

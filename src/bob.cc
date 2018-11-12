@@ -27,7 +27,7 @@ namespace bob {
       float carbs,
       float glycemic_index,
       int interval) {
-    std::vector<float> concentrations(time / interval, 0);
+    std::vector<float> concentrations;
     for (int current_time = 0; current_time < time; ++current_time) {
       if (current_time % interval == 0) {
         concentrations.push_back(this->initial_carbs * std::exp(-glycemic_index * current_time));
@@ -44,7 +44,7 @@ namespace bob {
       float insulin_release_rate,
       float glucose,
       int interval) {
-    std::vector<float> concentrations(time / interval, 0);
+    std::vector<float> concentrations;
     float diffusion_rate = (glycemic_index / insulin_release_rate - glycemic_index);
     for (int current_time = 0; current_time < time; ++current_time) {
       if (current_time % interval == 0) {
@@ -77,7 +77,6 @@ namespace bob {
       int interval) {
     auto carbs = this->carbohydrate_diffusion(time, this->initial_carbs, glycemic_index, interval);
     auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval);
-    for (auto it = carbs.begin(); it != carbs.end(); ++it) std::cout << *it << std::endl;
 
     std::cout << "Carbohydrates over " << time << " min " << "Glucose over " << time << " min" << std::endl;
     int timestamp = 0;

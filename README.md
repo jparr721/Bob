@@ -19,7 +19,7 @@ Supplied versions are what this system was tested on, and it may work on lower v
 
 #### Arch Linux
 ```
-pacman -S cmake clang
+pacman -S cmake clang openmp cuda
 ```
 #### Installing
 This project can be cloned anywhere on your system.

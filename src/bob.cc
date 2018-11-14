@@ -47,13 +47,11 @@ namespace bob {
       std::vector<float> carb_dist) {
     std::vector<float> concentrations;
     float diffusion_rate = (glycemic_index / insulin_release_rate - glycemic_index);
-    int cur = 0;
+
     for (int current_time = 0; current_time < time; ++current_time) {
       if (current_time % interval == 0) {
-        concentrations.push_back(
-            carb_dist[cur] * diffusion_rate * (
-              std::exp(-glycemic_index * current_time) - std::exp(-insulin_release_rate * current_time)) + glucose);
-        ++cur;
+        auto data = glucose - (carbs * (glycemic_index / insulin_release_rate - glycemic_index)) * (std::exp(-glycemic_index * current_time) - std::exp(-insulin_release_rate * current_time));
+        concentrations.push_back(data);
       }
     }
 

@@ -1,4 +1,4 @@
-#include <bob/bob.h>
+#include <bob/bob.hpp>
 
 #include <cmath>
 #include <iostream>
@@ -43,14 +43,17 @@ namespace bob {
       float glycemic_index,
       float insulin_release_rate,
       float glucose,
-      int interval) {
+      int interval,
+      std::vector<float> carb_dist) {
     std::vector<float> concentrations;
     float diffusion_rate = (glycemic_index / insulin_release_rate - glycemic_index);
+    int cur = 0;
     for (int current_time = 0; current_time < time; ++current_time) {
       if (current_time % interval == 0) {
         concentrations.push_back(
-            this->initial_carbs * diffusion_rate * (
-              std::exp(-glycemic_index * time) - std::exp(-insulin_release_rate * current_time)) + glucose);
+            carb_dist[cur] * diffusion_rate * (
+              std::exp(-glycemic_index * current_time) - std::exp(-insulin_release_rate * current_time)) + glucose);
+        ++cur;
       }
     }
 
@@ -76,9 +79,10 @@ namespace bob {
       float insulin_release_rate,
       int interval) {
     auto carbs = this->carbohydrate_diffusion(time, this->initial_carbs, glycemic_index, interval);
-    auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval);
+    auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval, carbs);
 
     std::cout << "Carbohydrates over " << time << " min " << "Glucose over " << time << " min" << std::endl;
+    std::cout << "Initial Levels: " << this->initial_carbs << " carbs " << this->initial_glucose << " glucose" << std::endl;
     int timestamp = 0;
 
     // Linearly scan and print our values

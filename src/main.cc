@@ -1,4 +1,4 @@
-#include <bob/bob.h>
+#include <bob/bob.hpp>
 
 #include <iostream>
 

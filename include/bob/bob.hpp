@@ -36,7 +36,8 @@ namespace bob {
           float glycemic_index,
           float insulin_release_rate,
           float glucose,
-          int interval);
+          int interval,
+          std::vector<float> carb_dist);
 
   };
 } // namespace bob

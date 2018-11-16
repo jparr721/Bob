@@ -50,7 +50,8 @@ namespace bob {
 
     for (int current_time = 0; current_time < time; ++current_time) {
       if (current_time % interval == 0) {
-        auto data = glucose - (carbs * (glycemic_index / insulin_release_rate - glycemic_index)) * (std::exp(-glycemic_index * current_time) - std::exp(-insulin_release_rate * current_time));
+        auto data = glucose - (carbs * (glycemic_index / insulin_release_rate - glycemic_index))
+          * (std::exp(-glycemic_index * current_time) - std::exp(-insulin_release_rate * current_time));
         concentrations.push_back(data);
       }
     }

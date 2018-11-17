@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <string>
 #include <vector>
 
 namespace bob {
@@ -39,7 +39,8 @@ namespace bob {
           int interval,
           std::vector<float> carb_dist);
 
-      void store_values(std::vector<float> carbs, std::vector<float> glucose);
+      std::vector<std::string> format_data(std::vector<float> carbs, std::vector<float> glucose, int time, int interval);
+      void write_to_file(std::vector<std::string> output_vector);
 
   };
 } // namespace bob

@@ -1,4 +1,5 @@
 #include <bob/bob.hpp>
+#include <bob/util.hpp>
 
 #include <cmath>
 #include <iostream>
@@ -59,6 +60,10 @@ namespace bob {
     return concentrations;
   }
 
+  void Bob::store_values(std::vector<float> carbs, std::vector<float> glucose) {
+    // TODO
+  }
+
   /**
    * The goal of the simulation is to simulate
    * the diffusion of glucose and carbohydrates
@@ -77,8 +82,13 @@ namespace bob {
       float glycemic_index,
       float insulin_release_rate,
       int interval) {
-    auto carbs = this->carbohydrate_diffusion(time, this->initial_carbs, glycemic_index, interval);
-    auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval, carbs);
+    Util u;
+    auto meals = u.read_file("meals.txt");
+    for (const auto meal : meals) {
+      this->set_initial_carbs(std::stof(meal));
+      auto carbs = this->carbohydrate_diffusion(time, this->initial_carbs, glycemic_index, interval);
+      auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval, carbs);
+    }
 
     std::cout << "Carbohydrates over " << time << " min " << "Glucose over " << time << " min" << std::endl;
     std::cout << "Initial Levels: " << this->initial_carbs << " carbs " << this->initial_glucose << " glucose" << std::endl;

@@ -1,5 +1,5 @@
-#ifndef BOB_BOB_HPP
-#define BOB_BOB_HPP
+#pragma once
+
 
 #include <vector>
 
@@ -39,7 +39,7 @@ namespace bob {
           int interval,
           std::vector<float> carb_dist);
 
+      void store_values(std::vector<float> carbs, std::vector<float> glucose);
+
   };
 } // namespace bob
-
-#endif

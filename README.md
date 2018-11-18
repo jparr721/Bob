@@ -44,8 +44,8 @@ To uninstall, simply execute `$ rm -r <PROJECT_ROT>` and this will remove the fi
 
 ## Roadmap
 - [x] - Get basic proof of concept up and running
-- [ ] - Add support for modular bob's and other friends
-- [ ] - Read biomedical data from a file and form a profile
+- [x] - Add support for modular bobs and other friends
+- [ ] - Read biomedical data from a file and form a profile *in progress*
 - [ ] - Differentiate between having and not having diabetes
 - [ ] - Return coherent data for machine learning layer
 

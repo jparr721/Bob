@@ -1,5 +1,5 @@
-#include <bob/bob.hpp>
-#include <bob/util.hpp>
+#include <bob/bob.h>
+#include <bob/util.h>
 
 #include <chrono>
 #include <cmath>

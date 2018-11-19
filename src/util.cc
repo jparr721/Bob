@@ -1,4 +1,5 @@
-#include <bob/util.hpp>
+#include <bob/util.h>
+
 #include <sstream>
 #include <fstream>
 

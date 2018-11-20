@@ -22,5 +22,6 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 add_executable(bob
   "${PROJECT_SOURCE_DIR}/src/main.cc"
   "${PROJECT_SOURCE_DIR}/src/bob.cc"
+  "${PROJECT_SOURCE_DIR}/src/util.cc"
 )
 target_link_libraries(bob Eigen3::Eigen)

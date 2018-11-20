@@ -33,6 +33,7 @@ namespace bob {
   void Bob::show_logo() const {
     std::cout << this->bob_logo << std::endl;
     std::cout << "Version: " << this->appversion << std::endl;
+    std::cout << "\n\n" << std::endl;
   }
 
   std::vector<float> Bob::carbohydrate_diffusion(
@@ -166,6 +167,7 @@ namespace bob {
       float glycemic_index,
       float insulin_release_rate,
       int interval) {
+    this->show_logo();
     auto carbs = this->carbohydrate_diffusion(time, this->initial_carbs, glycemic_index, interval);
     auto glucose = this->glucose_diffusion(time, this->initial_carbs, glycemic_index, insulin_release_rate, this->initial_glucose, interval, carbs);
 

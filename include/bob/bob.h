@@ -6,7 +6,7 @@
 namespace bob {
   class Bob {
     public:
-      Bob(std::string infile="input.txt", std::string outfile="output.txt");
+      Bob(std::string infile="profiles/input.txt", std::string outfile="profiles/output.txt");
       Bob(float carbs, float glucose);
       ~Bob() = default;
       void RunSimulation(
@@ -32,7 +32,7 @@ namespace bob {
       std::string outfile;
       float initial_carbs;
       float initial_glucose;
-      const std::string appversion = "0.6.3";
+      const std::string appversion = "0.7.0";
       const std::string bob_logo =
                   R"(
                     |  _ \      | |

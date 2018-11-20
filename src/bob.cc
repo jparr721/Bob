@@ -11,6 +11,7 @@
 #include <stdexcept>
 
 namespace bob {
+  Bob::Bob(std::string infile, std::string outfile) : infile(infile), outfile(outfile) {}
   Bob::Bob(float carbs, float glucose) : initial_carbs(carbs), initial_glucose(glucose) {}
 
   void Bob::set_initial_carbs(float carbs) {

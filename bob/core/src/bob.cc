@@ -11,30 +11,30 @@
 #include <stdexcept>
 
 namespace bob {
-  Bob::Bob(float carbs, float glucose) : initial_carbs(carbs), initial_glucose(glucose) {}
+  Core::Bob(float carbs, float glucose) : initial_carbs(carbs), initial_glucose(glucose) {}
 
-  void Bob::set_initial_carbs(float carbs) {
+  void Core::set_initial_carbs(float carbs) {
     this->initial_carbs = carbs;
   }
 
-  float Bob::get_initial_carbs() {
+  float Core::get_initial_carbs() {
     return this->initial_carbs;
   }
 
-  void Bob::set_initial_glucose(float glucose) {
+  void Core::set_initial_glucose(float glucose) {
     this->initial_glucose = glucose;
   }
 
-  float Bob::get_initial_glucose() {
+  float Core::get_initial_glucose() {
     return this->initial_glucose;
   }
 
-  void Bob::show_logo() const {
+  void Core::show_logo() const {
     std::cout << this->bob_logo << std::endl;
     std::cout << "Version: " << this->appversion << std::endl;
   }
 
-  std::vector<float> Bob::carbohydrate_diffusion(
+  std::vector<float> Core::carbohydrate_diffusion(
       int time,
       float carbs,
       float glycemic_index,
@@ -49,7 +49,7 @@ namespace bob {
     return concentrations;
   }
 
-  std::vector<float> Bob::glucose_diffusion(
+  std::vector<float> Core::glucose_diffusion(
       int time,
       float carbs,
       float glycemic_index,
@@ -71,7 +71,7 @@ namespace bob {
     return concentrations;
   }
 
-  std::vector<std::string> Bob::format_data(
+  std::vector<std::string> Core::format_data(
       std::vector<float> carbs,
       std::vector<float> glucose,
       int time,
@@ -100,7 +100,7 @@ namespace bob {
     return output_vector;
   }
 
-  void Bob::write_to_file(std::vector<std::string> output_vector) const {
+  void Core::write_to_file(std::vector<std::string> output_vector) const {
     std::ostringstream filename;
 
     // Get time of current run
@@ -127,7 +127,7 @@ namespace bob {
    * @param interval - The intervals in which to make
    *        observations
    */
-  void Bob::RunSimulation(
+  void Core::RunSimulation(
       int time,
       float glycemic_index,
       float insulin_release_rate,
@@ -160,7 +160,7 @@ namespace bob {
    * @param interval - The intervals in which to make
    *        observations
    */
-  void Bob::RunBasic(
+  void Core::RunBasic(
       int time,
       float glycemic_index,
       float insulin_release_rate,

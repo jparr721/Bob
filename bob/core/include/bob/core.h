@@ -1,24 +1,34 @@
+/**
+ * Copyright 2018- GVSU DEN Research Lab
+ *
+ * Licensed under the GNU Public License, Version 3.0
+ * you may not use this file except in compliance with
+ * the license. You may obtain a copy of this license
+ * at:
+ *
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ * DOC
+ * Core is an abstract class that defines the main engine
+ * for Bob to run off of. This code will be inhereted into
+ * the necessary models and implemented there
+ * *****************************************************/
+
 #pragma once
 
 #include <string>
 #include <vector>
 
 namespace bob {
-  class Bob {
+  class Core {
     public:
-      Bob(float carbs, float glucose);
-      ~Bob() = default;
-      void RunSimulation(
+      Core(int carbs, int glucose);
+      ~Core() = default;
+      virtual void RunSimulation(
           int time,
           float glycemic_index,
           float insulin_release_rate,
-          int interval);
-
-      void RunBasic(
-          int time,
-          float glycemic_index,
-          float insulin_release_rate,
-          int interval);
+          int interval) = 0;
 
       void set_initial_carbs(float carbs);
       float get_initial_carbs();

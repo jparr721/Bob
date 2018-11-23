@@ -22,13 +22,9 @@
 namespace bob {
   class Core {
     public:
-      Core(int carbs, int glucose);
+      Core(int carbs, int glucose) : initial_carbs(carbs), initial_glucose(glucose) {};
       ~Core() = default;
-      virtual void RunSimulation(
-          int time,
-          float glycemic_index,
-          float insulin_release_rate,
-          int interval) = 0;
+      virtual void run(int time, float glycemic_index, float insulin_rate, int interval) = 0;
 
       void set_initial_carbs(float carbs);
       float get_initial_carbs();
@@ -39,7 +35,7 @@ namespace bob {
     private:
       float initial_carbs;
       float initial_glucose;
-      const std::string appversion = "0.6.3";
+      const std::string appversion = "1.0.0";
       const std::string bob_logo =
                   R"(
                     |  _ \      | |

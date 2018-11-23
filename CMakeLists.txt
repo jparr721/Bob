@@ -34,10 +34,10 @@ include_directories(
   "${PROJECT_BINARY_DIR}")
 
 add_subdirectory(bob/core)
-add_subdirectory(bob/deep_model)
+add_subdirectory(bob/neural)
 add_subdirectory(bob/naive)
 
-export(TARGETS BobCore BobNeuralModel BobNaive FILE "${PROJECT_BINARY_DIR}/BobCoreTargets.cmake")
+export(TARGETS BobCore BobNeural BobNaive FILE "${PROJECT_BINARY_DIR}/BobCoreTargets.cmake")
 
 export(PACKAGE Bob)
 
@@ -53,3 +53,16 @@ configure_file(BobConfig.cmake.in
 set(CONF_INCLUDE_DIRS "\${BOB_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(BobConfig.cmake.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/BobConfig.cmake" @ONLY)
+
+# Install and Build trees
+configure_file(BobCoreConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/BobCoreConfigVersion.cmake" @ONLY)
+
+# Install the BobCoreConfig.cmake and BobCoreConfigVersion.cmake
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/BobCoreConfig.cmake"
+  "${PROJECT_BINARY_DIR}/BobCoreConfigVersion.cmake"
+  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
+install(EXPORT BobCoreTargets DESTINATIOn
+  "${INSTALL_CMAKE_DIR}" COMPONENT dev)

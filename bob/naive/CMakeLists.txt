@@ -22,3 +22,5 @@ target_link_libraries(
   BobCore
   Eigen3::Eigen
 )
+
+target_link_libraries(naive Eigen3::Eigen)

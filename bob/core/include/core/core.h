@@ -1,25 +1,30 @@
+/**
+ * Copyright 2018- GVSU DEN Research Lab
+ *
+ * Licensed under the GNU Public License, Version 3.0
+ * you may not use this file except in compliance with
+ * the license. You may obtain a copy of this license
+ * at:
+ *
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ * DOC
+ * Core is an abstract class that defines the main engine
+ * for Bob to run off of. This code will be inhereted into
+ * the necessary models and implemented there
+ * *****************************************************/
+
 #pragma once
 
 #include <string>
 #include <vector>
 
 namespace bob {
-  class Bob {
+  class Core {
     public:
-      Bob(std::string infile="profiles/input.txt", std::string outfile="profiles/output.txt");
-      Bob(float carbs, float glucose);
-      ~Bob() = default;
-      void RunSimulation(
-          int time,
-          float glycemic_index,
-          float insulin_release_rate,
-          int interval);
-
-      void RunBasic(
-          int time,
-          float glycemic_index,
-          float insulin_release_rate,
-          int interval);
+      Core(int carbs, int glucose) : initial_carbs(carbs), initial_glucose(glucose) {};
+      ~Core() = default;
+      virtual void run(int time, float glycemic_index, float insulin_rate, int interval) = 0;
 
       void set_initial_carbs(float carbs);
       float get_initial_carbs();
@@ -32,7 +37,7 @@ namespace bob {
       std::string outfile;
       float initial_carbs;
       float initial_glucose;
-      const std::string appversion = "0.7.0";
+      const std::string appversion = "1.0.0";
       const std::string bob_logo =
                   R"(
                     |  _ \      | |

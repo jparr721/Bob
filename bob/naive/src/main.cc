@@ -1,4 +1,4 @@
-#include <bob/bob.h>
+#include <core/core.h>
 
 #include <iostream>
 
@@ -34,9 +34,6 @@ int main(int argc, char** argv) {
       insulin_rate = std::stof(argv[4]);
       glycemic_index = std::stof(argv[5]);
       interval = std::stoi(argv[6]);
-
-      bob::Bob bobby(initial_carbs, initial_glucose);
-      bobby.RunBasic(time, glycemic_index, insulin_rate, interval);
       break;
     }
     case 1:

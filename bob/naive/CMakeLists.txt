@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-project(naive VERSION 1.0.0 LANGUAGES CXX)
+project(BobNaive VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,5 +22,3 @@ target_link_libraries(
   BobCore
   Eigen3::Eigen
 )
-
-target_link_libraries(naive Eigen3::Eigen)

@@ -5,8 +5,7 @@ set(BOB_MAJOR_VERSION 0)
 set(BOB_MINOR_VERSION 1)
 set(BOB_PATCH_VERSION 0)
 set(BOB_VERSION
-  ${BOB_MAJOR_VERSION+.${BOB_MINOR_VERSION}.${BOB_PATCH_VERSION})
-)
+  ${BOB_MAJOR_VERSION}.${BOB_MINOR_VERSION}.${BOB_PATCH_VERSION})
 
 set(INSTALL_LIB_DIR lib CACHE PATH "Install directory for library code")
 set(INSTALL_BIN_DIR CACHE PATH "Install directory for executables")
@@ -64,5 +63,5 @@ install(FILES
   "${PROJECT_BINARY_DIR}/BobCoreConfigVersion.cmake"
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 
-install(EXPORT BobCoreTargets DESTINATIOn
+install(EXPORT BobCoreTargets DESTINATION
   "${INSTALL_CMAKE_DIR}" COMPONENT dev)

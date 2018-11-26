@@ -21,7 +21,7 @@ set_target_properties(BobCore PROPERTIES
 
 install(DIRECTORY include/ DESTINATION "${INSTALL_INCLUDE_DIR}")
 
-install(TARGETS BobCoe
+install(TARGETS BobCore
   EXPORT BobCoreTargets
   RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
   LIBRARY DESTINATION "${INSTAL_LIB_DIR}/bob/core" COMPONENT shlib

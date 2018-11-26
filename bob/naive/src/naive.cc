@@ -1,5 +1,5 @@
-#include <bob/core.h>
-#include <bob/naive.h>
+#include <core/core.h>
+#include <naive/naive.h>
 
 namespace bob {
 

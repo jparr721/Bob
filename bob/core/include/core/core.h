@@ -33,6 +33,8 @@ namespace bob {
       float get_initial_glucose();
 
     private:
+      std::string infile;
+      std::string outfile;
       float initial_carbs;
       float initial_glucose;
       const std::string appversion = "1.0.0";

@@ -45,8 +45,10 @@ To uninstall, simply execute `$ rm -r <PROJECT_ROT>` and this will remove the fi
 ## Roadmap
 - [x] - Get basic proof of concept up and running
 - [x] - Add support for modular bobs and other friends
-- [ ] - Read biomedical data from a file and form a profile *in progress*
-- [ ] - Differentiate between having and not having diabetes
+- [x] - Read biomedical data from a file and form a profile
+- [x] - Differentiate between having and not having diabetes
+- [ ] - Implement dumb model for reactive insulin fluctuation
+- [ ] - Implement neural model for predictive insulin fluctuation
 - [ ] - Return coherent data for machine learning layer
 
 ## License

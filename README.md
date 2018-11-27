@@ -40,7 +40,7 @@ make
 ```
 
 #### Uninstalling
-To uninstall, simply execute `$ rm -r <PROJECT_ROT>` and this will remove the files.
+To uninstall, simply execute `$ rm -r <PROJECT_ROOT>` and this will remove the files.
 
 ## Roadmap
 - [x] - Get basic proof of concept up and running

@@ -2,24 +2,6 @@
 
 #include <iostream>
 
-void usage() {
-  const std::string usage_str =
-    R"(
-    Bob           The Coolest Guy Around
-
-      bob <time> <initial_carbs> <initial_glucose> <insulin_rate> <glucemic_index> <interval>
-        -- Runs an instance of the simuation in a single case with no historical considerations
-
-      bob [input.txt] [output.txt]
-        -- Runs a stream simulation from an input file and put the output in the output file
-           to facilitate interpretation by the RNN.
-        -- Default input: input.txt
-        -- Default output: output.txt
-    )";
-
-   std::cout << usage_str << std::endl;
-}
-
 int main(int argc, char** argv) {
   int time, interval;
   float initial_carbs, initial_glucose, insulin_rate, glycemic_index;

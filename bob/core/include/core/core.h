@@ -33,6 +33,9 @@ namespace bob {
 
       void set_initial_glucose(float glucose);
       float get_initial_glucose();
+      void usage() {
+}
+
 
     private:
       std::string infile;

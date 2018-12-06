@@ -1,5 +1,5 @@
 # Bob
-Bob is a compartment simulation of a diabetes patient to provide continuous inputs to a deep reinforcement learning algorithm as apart of the Lazarus research project.
+Bob is a compartment simulation of a diabetes patient to provide continuous inputs to a deep reinforcement learning algorithm as apart of the Lazarus research project. Bob also allows for the modular generation of two-compartment data via the use of base functionality that can be extended to different circumstances. You can also simply define profiles and take the outputs for study if you'd prefer to do it that way.
 
 ## Why?
 Medical data is hard to get, and you can't perform experiments on people without sufficient backing, research, and funding. As a result, I have created Bob here to suffer from diabetes and other extremely taxing health conditions to help simulate how it might look inside of a real person. The intention of this system is to develop my classifier and insulin injection pancreas replacement device.
@@ -40,13 +40,15 @@ make
 ```
 
 #### Uninstalling
-To uninstall, simply execute `$ rm -r <PROJECT_ROT>` and this will remove the files.
+To uninstall, simply execute `$ rm -r <PROJECT_ROOT>` and this will remove the files.
 
 ## Roadmap
 - [x] - Get basic proof of concept up and running
 - [x] - Add support for modular bobs and other friends
-- [ ] - Read biomedical data from a file and form a profile *in progress*
-- [ ] - Differentiate between having and not having diabetes
+- [x] - Read biomedical data from a file and form a profile
+- [x] - Differentiate between having and not having diabetes
+- [ ] - Implement dumb model for reactive insulin fluctuation
+- [ ] - Implement neural model for predictive insulin fluctuation
 - [ ] - Return coherent data for machine learning layer
 
 ## License

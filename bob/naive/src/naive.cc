@@ -68,7 +68,7 @@ namespace bob {
       this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_POSITIVE_MULTIPLIER);
     } else if (current_glucose > this->MAXIMUM_UPPER_THRESHOLD) {
       this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_POSITIVE_MULTIPLIER, 2));
-    } else if (current_glucose <= this->LOWE_THRESHOLD &&
+    } else if (current_glucose <= this->LOWER_THRESHOLD &&
         current_glucose > this->MAXIMUM_LOWER_THRESHOLD) {
       this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER);
     } else {

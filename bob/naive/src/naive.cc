@@ -1,6 +1,7 @@
 #include <core/util.h>
 #include <naive/naive.h>
 
+#include <cmath>
 #include <unordered_map>
 
 namespace bob {
@@ -11,7 +12,7 @@ namespace bob {
     this->bolus = bolus;
   }
 
-  double get_insulin_bolus() {
+  double Naive::get_insulin_bolus() {
     return this->bolus;
   }
 
@@ -37,13 +38,41 @@ namespace bob {
       new_carbs.push_back(lines[0][i]);
     }
 
-    for (;;) {
-      int i = 0;
+    float glucose_level, carb_level;
+    // Loop forever
+    for (int i = 0;; +=i) {
       int total_entries = new_carbs.size();
-      float glucose_level = this->glucose_diffusion(
-          new_carbs[i % total_entries],
-          this->bolus
-    }
 
+      // Runs for each time in the interval
+      for (int j = 0; j < time; ++j) {
+        glucose_level = this->glucose_diffusion(
+            new_carbs[i % total_entries],
+            glucose,
+            this->bolus,
+            this->glycemic_index,
+            i);
+        carb_level = this->carbohydrate_diffusion(
+            new_carbs[i % total_entries],
+            this->bolus,
+            this->glycemic_index,
+            i);
+        this->verify_insulin_dispersion(glucose_level);
+      }
+    }
+  }
+
+  void Naive::verify_insulin_dispersion(float current_glucose) {
+    //TODO -- Try to make this cleaner? Maybe?
+    if (current_glucose >= this->UPPER_THRESHOLD &&
+        current_glucose < this->MAXIMUM_UPPER_THRESHOLD) {
+      this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_POSITIVE_MULTIPLIER);
+    } else if (current_glucose > this->MAXIMUM_UPPER_THRESHOLD) {
+      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_POSITIVE_MULTIPLIER, 2));
+    } else if (current_glucose <= this->LOWE_THRESHOLD &&
+        current_glucose > this->MAXIMUM_LOWER_THRESHOLD) {
+      this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER);
+    } else {
+      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER, 2));
+    }
   }
 } // namespace bob

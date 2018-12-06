@@ -51,7 +51,7 @@ namespace bob {
     return carbs * std::exp(-glycemic_index * time);
   }
 
-  float Core::glucose_diffusion(float carbs, float irr, float gly_index, int time) const {
+  float Core::glucose_diffusion(float carbs, float glucose,float irr, float gly_index, int time) const {
     return glucose - (carbs * (gly_index / irr - gly_index)) * (std::exp(
           -gly_index * time) - std::exp(-irr * time));
   }

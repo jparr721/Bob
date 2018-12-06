@@ -5,10 +5,11 @@
 namespace bob {
   class Naive : public Core {
     public:
-     Naive(int carbs, int glucose) : initial_carbs(carbs), initial_glucose(glucose) {};
+     Naive() = default;
+     Naive(float carbs, float glucose);
      ~Naive() = default;
 
-     void simulate(int time);
+     void simulate(const std::string profile);
     private:
       const int MAXIMUM_UPPER_THRESHOLD = 155;
       const int UPPER_THRESHOLD = 105;
@@ -20,7 +21,7 @@ namespace bob {
       double glycemic_index = 0.0453;
 
       void verify_insulin_dispersion(float current_glucose);
-      void adjust_insulin_bolus(double bolus) const;
+      void adjust_insulin_bolus(double bolus);
 
       double get_insulin_bolus();
   };

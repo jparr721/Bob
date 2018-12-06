@@ -1,12 +1,17 @@
 #include <core/util.h>
 
+#include <chrono>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <stdexcept>
 #include <sstream>
 
 namespace bob {
-  std::vector<std::string> Util::read_file(std::string filename) {
-    std::ifstream input(filename);
+  std::vector<std::string> Util::read_file(std::string path) const {
+    std::ifstream input(path);
+    if (!input.good()) throw std::invalid_argument("Invalid path specified");
     std::vector<std::string> data;
     std::string line;
 
@@ -18,11 +23,17 @@ namespace bob {
     return data;
   }
 
-  std::vector<std::string> Core::format_data(
+  std::vector<std::string> Util::split_by_space(std::string input) const {
+    std::istringstream iss(input);
+    return std::vector<std::string> {std::istream_iterator<std::string>{iss},
+                                     std::istream_iterator<std::string>{}};
+  }
+
+  std::vector<std::string> Util::format_data(
       std::vector<float> carbs,
       std::vector<float> glucose,
       int time,
-      int interval) {
+      int interval) const {
     std::vector<std::string> output_vector;
     // Before storage, verify uniform sizing on input vectors
     if (carbs.size() != glucose.size()) {
@@ -33,7 +44,7 @@ namespace bob {
     std::ostringstream run_header, data_line;
     run_header << "Carbohydrates over " << time << " min " << "Glucose over " << time << " min";
 
-    data_line << "Initial Levels: " << this->initial_carbs << " carbs " << this->initial_glucose << " glucose" << std::endl;
+    data_line << "Initial Levels: " << carbs[0] << " carbs " << glucose[0] << " glucose" << std::endl;
     output_vector.push_back(data_line.str());
     int timestamp = 0;
 
@@ -47,7 +58,7 @@ namespace bob {
     return output_vector;
   }
 
-  void Core::write_to_file(std::vector<std::string> output_vector) const {
+  void Util::write_to_file(std::vector<std::string> output_vector) const {
     std::ostringstream filename;
 
     // Get time of current run

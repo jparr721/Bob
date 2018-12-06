@@ -3,9 +3,15 @@
 
 #include <cmath>
 #include <unordered_map>
+#include <vector>
 
 namespace bob {
-  void Naive::adjust_insulin_bolus(double bolus) const {
+  Naive::Naive(float carbs, float glucose) {
+    this->set_initial_carbs(carbs);
+    this->set_initial_glucose(glucose);
+  }
+
+  void Naive::adjust_insulin_bolus(double bolus) {
     if (bolus <= 0) {
       return;
     }
@@ -16,21 +22,21 @@ namespace bob {
     return this->bolus;
   }
 
-  void Naive::simulate(std::string profile) {
+  void Naive::simulate(const std::string profile) {
     this->show_logo();
     Util u;
     // Load in our user profile
-    auto lines = u.read_file(profile);
+    std::vector<std::string> lines = u.read_file(profile);
     int time, interval;
-    double carbs, glucose, bolus, glycemic_index;
-    time = std::stoi(lines[0][0]);
-    interval = std::stoi(lines[0][5]);
-    carbs = std::atof(lines[0][1]);
-    glucose = std::atof(lines[0][2]);
-    bolus_init = std::atof(lines[0][3]);
-    glycemic_index = std::atof(lines[0][4]);
+    double carbs, glucose, bolus_init, glycemic_index;
 
-    if (
+    std::vector<std::string> initial_vals = u.split_by_space(lines[0]);
+    time = std::stoi(initial_vals[0]);
+    interval = std::stoi(initial_vals[5]);
+    carbs = std::stof(initial_vals[1]);
+    glucose = std::stof(initial_vals[2]);
+    bolus_init = std::stof(initial_vals[3]);
+    glycemic_index = std::stof(initial_vals[4]);
 
     std::vector<int> new_carbs(lines.size() - 2);
 
@@ -40,7 +46,7 @@ namespace bob {
 
     float glucose_level, carb_level;
     // Loop forever
-    for (int i = 0;; +=i) {
+    for (int i = 0;; ++i) {
       int total_entries = new_carbs.size();
 
       // Runs for each time in the interval
@@ -53,7 +59,6 @@ namespace bob {
             i);
         carb_level = this->carbohydrate_diffusion(
             new_carbs[i % total_entries],
-            this->bolus,
             this->glycemic_index,
             i);
         this->verify_insulin_dispersion(glucose_level);

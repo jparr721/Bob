@@ -6,12 +6,15 @@
  * the license. You may obtain a copy of this license
  * at:
  *
- * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *   https://www.gnu.org/licenses/gpl-3.0.en.html
  *
  * DOC
- * Core is an abstract class that defines the main engine
+ * Core is a class that defines the main engine
  * for Bob to run off of. This code will be inhereted into
  * the necessary models and implemented there
+ *
+ * Abbreviations: irr - Insulin Release Rate
+ *                gly_index - Glyecmic Index
  * *****************************************************/
 
 #include <core/core.h>
@@ -30,7 +33,7 @@ namespace bob {
     this->initial_carbs = carbs;
   }
 
-  float Core::get_initial_carbs() {
+  float Core::get_initial_carbs() const {
     return this->initial_carbs;
   }
 
@@ -38,7 +41,7 @@ namespace bob {
     this->initial_glucose = glucose;
   }
 
-  float Core::get_initial_glucose() {
+  float Core::get_initial_glucose() const {
     return this->initial_glucose;
   }
 

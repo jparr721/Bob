@@ -1,4 +1,4 @@
-#include <core/core.h>
+#include <naive/naive.h>
 
 #include <iostream>
 
@@ -16,13 +16,16 @@ int main(int argc, char** argv) {
       insulin_rate = std::stof(argv[4]);
       glycemic_index = std::stof(argv[5]);
       interval = std::stoi(argv[6]);
+      bob::Naive n(initial_carbs, initial_glucose);
+      n.simulate("../../../profiles/bob");
       break;
     }
     case 1:
     case 2:
       if (argv[1] && std::string(argv[1]) == "--help") {
+        bob::Naive n;
         std::cout << argv[1] << std::endl;
-        usage();
+        /* n.usage(); */
         break;
       }
       std::cout << "No options specified, ruinnning with default file locations" << std::endl;
@@ -32,7 +35,8 @@ int main(int argc, char** argv) {
       outfile = argv[2];
       break;
     default:
-      usage();
+      bob::Naive n;
+      /* n.usage(); */
       break;
   }
 

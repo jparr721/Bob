@@ -45,6 +45,11 @@ namespace bob {
     return this->initial_glucose;
   }
 
+  void Core::usage(std::string opts) const {
+    this->show_logo();
+    std::cout << opts << std::endl;
+  }
+
   void Core::show_logo() const {
     std::cout << this->bob_logo << std::endl;
     std::cout << "Version: " << this->appversion << std::endl;
@@ -58,5 +63,6 @@ namespace bob {
     return glucose - (carbs * (gly_index / irr - gly_index)) * (std::exp(
           -gly_index * time) - std::exp(-irr * time));
   }
+
 
 } // namespace bob

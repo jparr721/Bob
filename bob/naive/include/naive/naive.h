@@ -5,11 +5,16 @@
 namespace bob {
   class Naive : public Core {
     public:
-     Naive() = default;
-     Naive(float carbs, float glucose);
-     ~Naive() = default;
+      Naive() = default;
+      ~Naive() = default;
 
-     void simulate(const std::string profile);
+      void simulate(const std::string profile);
+      const std::string OPTS =
+          R"(
+Bob Naive Model
+
+BobNaive <profile>
+          )";
     private:
       const int MAXIMUM_UPPER_THRESHOLD = 155;
       const int UPPER_THRESHOLD = 105;

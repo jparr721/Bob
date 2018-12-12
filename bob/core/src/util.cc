@@ -10,6 +10,7 @@
 
 namespace bob {
   std::vector<std::string> Util::read_file(std::string path) const {
+    std::cout << "Opening: " << path << std::endl;
     std::ifstream input(path);
     if (!input.good()) throw std::invalid_argument("Invalid path specified");
     std::vector<std::string> data;

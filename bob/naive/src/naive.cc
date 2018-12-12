@@ -2,15 +2,11 @@
 #include <naive/naive.h>
 
 #include <cmath>
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 
 namespace bob {
-  Naive::Naive(float carbs, float glucose) {
-    this->set_initial_carbs(carbs);
-    this->set_initial_glucose(glucose);
-  }
-
   void Naive::adjust_insulin_bolus(double bolus) {
     if (bolus <= 0) {
       return;
@@ -46,7 +42,7 @@ namespace bob {
 
     float glucose_level, carb_level;
     // Loop forever
-    for (int i = 0;; ++i) {
+    for (int i = 0; i < 1; ++i) {
       int total_entries = new_carbs.size();
 
       // Runs for each time in the interval
@@ -57,11 +53,18 @@ namespace bob {
             this->bolus,
             this->glycemic_index,
             i);
+        glucose = glucose_level;
+        std::cout << "Glucose level currently is: " << glucose_level << std::endl;
         carb_level = this->carbohydrate_diffusion(
             new_carbs[i % total_entries],
             this->glycemic_index,
             i);
+        carbs = carb_level;
+        std::cout << "Carb level currently is: " << carb_level << std::endl;
+
+        // Our "dumb" predictor to adjust insulin release rates
         this->verify_insulin_dispersion(glucose_level);
+        std::cout << "Current insulin release rate: " << this->bolus << std::endl;
       }
     }
   }
@@ -76,8 +79,10 @@ namespace bob {
     } else if (current_glucose <= this->LOWER_THRESHOLD &&
         current_glucose > this->MAXIMUM_LOWER_THRESHOLD) {
       this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER);
-    } else {
+    } else if (current_glucose < this->MAXIMUM_LOWER_THRESHOLD) {
       this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER, 2));
+    } else {
+      return;
     }
   }
 } // namespace bob

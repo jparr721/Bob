@@ -36,17 +36,17 @@ namespace bob {
 
       void set_initial_carbs(float carbs);
       void set_initial_glucose(float glucose);
-      void usage() const;
+      void usage(const std::string opts) const;
       void show_logo() const;
 
-      const std::string appversion = "1.0.0";
+      const std::string appversion = "3.2.17";
       const std::string bob_logo =
                   R"(
-                    |  _ \      | |
-                    | |_) | ___ | |__
-                    |  _ < / _ \| '_ \
-                    | |_) | (_) | |_) |
-                    |____/ \___/|_.__/
+                        |  _ \      | |
+                        | |_) | ___ | |__
+                        |  _ < / _ \| '_ \
+                        | |_) | (_) | |_) |
+                        |____/ \___/|_.__/
                     )";
 
 

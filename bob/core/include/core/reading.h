@@ -35,7 +35,7 @@ namespace bob {
 
       bool operator==(Reading const& r) const;
 
-      std::ostream& operator<<(std::ostream& os, Reading const& r);
+      friend std::ostream& operator<<(std::ostream& os, Reading const& r);
     private:
       double glucose;
       double carbs;

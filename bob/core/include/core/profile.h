@@ -29,13 +29,29 @@ namespace bob {
       ~Profile() = default;
 
       void indexer(std::string const& profile_path);
-      void modify_insulin_bolus(double glucose_level);
+      void modify_insulin_bolus(double bolus);
       void operator=(Profile const& p);
 
       bool operator==(Profile const& p) const;
 
-      std::ostream& operator<<(std::ostream& os, Profile const& p);
+      int get_time();
+      int get_interval();
+
+      double get_init_meal();
+      double get_init_glucose();
+      double get_irr();
+      double get_gly_idx();
+
+      std::vector<float> get_meals();
+
+      friend std::ostream& operator<<(std::ostream& os, Profile const& p);
     private:
+      const int MAXIMUM_UPPER_THRESHOLD = 155;
+      const int UPPER_THRESHOLD = 105;
+      const int LOWER_THRESHOLD = 75;
+      const int MAXIMUM_LOWER_THRESHOLD = 50;
+      const float STANDARD_BOLUS_NEGATIVE_MULTIPLIER = 0.75;
+      const float STANDARD_BOLUS_POSITIVE_MULTIPLIER = 1.25;
       bool has_diabetes;
 
       int time;

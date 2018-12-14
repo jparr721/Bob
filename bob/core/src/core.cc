@@ -18,6 +18,7 @@
  * *****************************************************/
 
 #include <core/core.h>
+#include <core/profile.h>
 #include <core/util.h>
 
 #include <chrono>
@@ -50,8 +51,9 @@ namespace bob {
     std::cout << opts << std::endl;
   }
 
-  void simulate(const std::string profile, std::function<void(...)> sim) {
-
+  void simulate(std::function<void(Profile const& profile)> sim) {
+    // TODO -- Add logging support here
+    sim();
   }
 
   void Core::show_logo() const {

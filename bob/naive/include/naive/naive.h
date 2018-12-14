@@ -8,7 +8,7 @@ namespace bob {
       Naive() = default;
       ~Naive() = default;
 
-      void simulate(const std::string profile);
+      void simulate [](const std::string profile);
       const std::string OPTS =
           R"(
 Bob Naive Model

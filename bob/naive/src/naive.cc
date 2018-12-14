@@ -7,17 +7,6 @@
 #include <vector>
 
 namespace bob {
-  void Naive::adjust_insulin_bolus(double bolus) {
-    if (bolus <= 0) {
-      return;
-    }
-    this->bolus = std::fmod(bolus, 1.0);
-  }
-
-  double Naive::get_insulin_bolus() {
-    return this->bolus;
-  }
-
   void Naive::simulate(const std::string profile) {
     this->show_logo();
     Util u;

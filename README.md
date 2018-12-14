@@ -17,6 +17,7 @@ Some abbreviations are used in the code and in the docs here, they are as follow
 Profiles are handled via the profiles directory. In their current state they go along with the following syntax:
 
 Line One:
+
 `<time> <initial_meal_size(g of carbs)> <intial_glucose(mg/dl)> <irr> <gly_idx> <interval> <has_diabetes(0, 1)>`
 
 This line lays out the standard operational syntax for supporting a particular profile. Modeling people in various stages of diabetes just requires tweaking the variables to fit that profile, you can also run the simulation with default levels for 'healthy' people. Those are: `0.0224 mg/dl irr` and `0.0453 mg/dl gly idx`.

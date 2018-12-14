@@ -37,13 +37,14 @@ namespace bob {
     this->time = r.time;
   }
 
-  std::ostream& Reading::operator<<(std::ostream& os, Reading const& r) {
+  std::ostream& operator<<(std::ostream& os, Reading const& r) {
     os << "{ " <<
       r.glucose <<
       ", " <<
       r.carbs <<
       ", " <<
-      r.time;
+      r.time <<
+      " }";
 
     return os;
   }

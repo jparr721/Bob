@@ -17,7 +17,7 @@ Some abbreviations are used in the code and in the docs here, they are as follow
 Profiles are handled via the profiles directory. In their current state they go along with the following syntax:
 
 Line One:
-`<time> <initial_meal_size(g of carbs)> <intial_glucose(mg/dl)> <irr> <gly_idx> <interval>`
+`<time> <initial_meal_size(g of carbs)> <intial_glucose(mg/dl)> <irr> <gly_idx> <interval> <has_diabetes(0, 1)>`
 
 This line lays out the standard operational syntax for supporting a particular profile. Modeling people in various stages of diabetes just requires tweaking the variables to fit that profile, you can also run the simulation with default levels for 'healthy' people. Those are: `0.0224 mg/dl irr` and `0.0453 mg/dl gly idx`.
 
@@ -25,24 +25,17 @@ Following that, on every subsequent line, we lay out the meals, right now the in
 
 ```
 For a time of 180 minutes
-100 // 8 am
-50  // 11 am
-100 // 2 pm
-10  // 5 pm
+100 // 8 am 50  // 11 am 100 // 2 pm 10  // 5 pm
 ```
 
-Where the time in between each is dictated by the time specified in line one. All times are considered in minutes. 
+Where the time in between each is dictated by the time specified in line one. All times are considered in minutes.
 
 ### Example Patient Profile
 
 ```
 $ cat profiles/bob
 180 127.7 75 0.0224 0.0453 30
-50
-70
-120
-30
-10
+50 70 120 30 10
 ```
 
 This represents a 180 minute time with 30 minute intervals. The interval serves as a simple way to extract values by this, and will be printed to the console based on this. Logging to files will also follow this interval. All times will be recorded in minutes.

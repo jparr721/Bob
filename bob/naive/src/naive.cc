@@ -11,7 +11,7 @@ namespace bob {
     if (bolus <= 0) {
       return;
     }
-    this->bolus = bolus;
+    this->bolus = std::fmod(bolus, 1.0);
   }
 
   double Naive::get_insulin_bolus() {
@@ -34,55 +34,64 @@ namespace bob {
     bolus_init = std::stof(initial_vals[3]);
     glycemic_index = std::stof(initial_vals[4]);
 
-    std::vector<int> new_carbs(lines.size() - 2);
+    std::vector<std::string> new_carbs_string = u.split_by_space(lines[1]);
+    std::vector<float> new_carbs;
+    new_carbs.reserve(new_carbs_string.size());
 
-    for (auto i = 1u; i < lines.size(); ++i) {
-      new_carbs.push_back(lines[0][i]);
+    // Convert to float vector
+    // TODO Clean up this routine
+    for (const auto& carb : new_carbs_string) {
+      new_carbs.push_back(std::stof(carb));
     }
 
     float glucose_level, carb_level;
     // Loop forever
-    for (int i = 0; i < 1; ++i) {
+    std::cout << "Initialization complete, running simulation..." << std::endl;
+    for (int i = 1; i < 2; ++i) {
+      std::cout << "Initialization complete, running simulation..." << std::endl;
       int total_entries = new_carbs.size();
 
       // Runs for each time in the interval
-      for (int j = 0; j < time; ++j) {
+      for (int j = 1; j < time; ++j) {
+        std::cout << "Time Elapsed: " << j << " minutes" << std::endl;
         glucose_level = this->glucose_diffusion(
             new_carbs[i % total_entries],
             glucose,
             this->bolus,
             this->glycemic_index,
-            i);
+            j);
         glucose = glucose_level;
-        std::cout << "Glucose level currently is: " << glucose_level << std::endl;
+        std::cout << "Glucose level currently is: " << glucose << std::endl;
         carb_level = this->carbohydrate_diffusion(
             new_carbs[i % total_entries],
             this->glycemic_index,
-            i);
+            j);
         carbs = carb_level;
-        std::cout << "Carb level currently is: " << carb_level << std::endl;
+        std::cout << "Carb level currently is: " << carbs << std::endl;
 
         // Our "dumb" predictor to adjust insulin release rates
-        this->verify_insulin_dispersion(glucose_level);
+        /* this->verify_insulin_dispersion(glucose_level); */
         std::cout << "Current insulin release rate: " << this->bolus << std::endl;
+        std::cout << "------------------------------" << std::endl;
       }
     }
   }
 
   void Naive::verify_insulin_dispersion(float current_glucose) {
+    if (current_glucose > 550) {
+      std::cout << "DEFINTELY DEAD" << std::endl;
+    }
     //TODO -- Try to make this cleaner? Maybe?
     if (current_glucose >= this->UPPER_THRESHOLD &&
         current_glucose < this->MAXIMUM_UPPER_THRESHOLD) {
       this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_POSITIVE_MULTIPLIER);
     } else if (current_glucose > this->MAXIMUM_UPPER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_POSITIVE_MULTIPLIER, 2));
+      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_POSITIVE_MULTIPLIER, 5));
     } else if (current_glucose <= this->LOWER_THRESHOLD &&
         current_glucose > this->MAXIMUM_LOWER_THRESHOLD) {
       this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER);
     } else if (current_glucose < this->MAXIMUM_LOWER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER, 2));
-    } else {
-      return;
+      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER, 5));
     }
   }
 } // namespace bob

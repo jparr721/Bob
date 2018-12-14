@@ -50,6 +50,10 @@ namespace bob {
     std::cout << opts << std::endl;
   }
 
+  void simulate(const std::string profile, std::function<void(...)> sim) {
+
+  }
+
   void Core::show_logo() const {
     std::cout << this->bob_logo << std::endl;
     std::cout << "Version: " << this->appversion << std::endl;

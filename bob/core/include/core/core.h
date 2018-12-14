@@ -39,6 +39,8 @@ namespace bob {
       void usage(const std::string opts) const;
       void show_logo() const;
 
+      auto simulate(const std::string profile, std::function<void(...)> sim);
+
       const std::string appversion = "3.2.17";
       const std::string bob_logo =
                   R"(

@@ -21,7 +21,7 @@ BobNaive <profile>
       const int LOWER_THRESHOLD = 75;
       const int MAXIMUM_LOWER_THRESHOLD = 50;
       const float STANDARD_BOLUS_NEGATIVE_MULTIPLIER = 0.75;
-      const float STANDARD_BOLUS_POSITIVE_MULTIPLIER = 1.15;
+      const float STANDARD_BOLUS_POSITIVE_MULTIPLIER = 1.25;
       double bolus = 0.0224;
       double glycemic_index = 0.0453;
 

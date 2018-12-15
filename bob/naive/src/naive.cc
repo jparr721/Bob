@@ -1,3 +1,4 @@
+#include <core/reading.h>
 #include <core/util.h>
 #include <naive/naive.h>
 
@@ -6,32 +7,40 @@
 #include <unordered_map>
 #include <vector>
 
+// Idea; make a reading creator function to store previous outputs
+// to make the naive predictor more intelligent...
+
 namespace bob {
+  auto Naive::naive_sim [](Profile const& profile)->void {
+    this->show_logo();
+
+    float current_glucose, current_carbs;
+    size_t meal_count = profile.meals.size();
+
+    // Idea: logger class that takes a map of data labels, then
+    // inside of here just print based on the label via a built
+    // in print() function that will be formatted accoring to the
+    // map...
+    for (int i = 1; i < profile.days; ++i) {
+      for (int j = 1; j < profile.get_time(); ++j) {
+        current_glucose = this->glucose_diffusion(
+           profile.meals[i % meal_count],
+           profile.glucose,
+           profile.irr,
+           profile.gly_idx,
+           j];
+        profile.glucose = current_glucose;
+        current_carbs = this->carbohydrate_diffusion(
+          profile.meals[i % meal_count],
+          profile.gly_idx,
+          j];
+        // TODO(jparr721) Finish this impl
+        // TODO(jparr721) Add reading class impl
+      }
+    }
+  }
   void Naive::simulate(const std::string profile) {
     this->show_logo();
-    Util u;
-    // Load in our user profile
-    std::vector<std::string> lines = u.read_file(profile);
-    int time, interval;
-    double carbs, glucose, bolus_init, glycemic_index;
-
-    std::vector<std::string> initial_vals = u.split_by_space(lines[0]);
-    time = std::stoi(initial_vals[0]);
-    interval = std::stoi(initial_vals[5]);
-    carbs = std::stof(initial_vals[1]);
-    glucose = std::stof(initial_vals[2]);
-    bolus_init = std::stof(initial_vals[3]);
-    glycemic_index = std::stof(initial_vals[4]);
-
-    std::vector<std::string> new_carbs_string = u.split_by_space(lines[1]);
-    std::vector<float> new_carbs;
-    new_carbs.reserve(new_carbs_string.size());
-
-    // Convert to float vector
-    // TODO Clean up this routine
-    for (const auto& carb : new_carbs_string) {
-      new_carbs.push_back(std::stof(carb));
-    }
 
     float glucose_level, carb_level;
     // Loop forever
@@ -63,24 +72,6 @@ namespace bob {
         std::cout << "Current insulin release rate: " << this->bolus << std::endl;
         std::cout << "------------------------------" << std::endl;
       }
-    }
-  }
-
-  void Naive::verify_insulin_dispersion(float current_glucose) {
-    if (current_glucose > 550) {
-      std::cout << "DEFINTELY DEAD" << std::endl;
-    }
-    //TODO -- Try to make this cleaner? Maybe?
-    if (current_glucose >= this->UPPER_THRESHOLD &&
-        current_glucose < this->MAXIMUM_UPPER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_POSITIVE_MULTIPLIER);
-    } else if (current_glucose > this->MAXIMUM_UPPER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_POSITIVE_MULTIPLIER, 5));
-    } else if (current_glucose <= this->LOWER_THRESHOLD &&
-        current_glucose > this->MAXIMUM_LOWER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER);
-    } else if (current_glucose < this->MAXIMUM_LOWER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER, 5));
     }
   }
 } // namespace bob

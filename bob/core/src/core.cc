@@ -52,7 +52,7 @@ namespace bob {
   }
 
   void simulate(std::function<void(Profile const& profile)> sim) {
-    // TODO -- Add logging support here
+    // TODO(jparr721) Add logging support here
     sim();
   }
 

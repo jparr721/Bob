@@ -15,6 +15,7 @@
  * *****************************************************/
 
 #pragma once
+#include <core/profile.h>
 
 #include <sstream>
 
@@ -22,6 +23,7 @@ namespace bob {
   class Reading {
     public:
       ~Reading() = default;
+      Reading make_reading(Profile const& p, int time);
 
       void set_glucose(double glucose);
       void set_carbs(double carbs);

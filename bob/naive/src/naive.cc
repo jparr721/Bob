@@ -34,6 +34,7 @@ namespace bob {
           profile.meals[i % meal_count],
           profile.gly_idx,
           j];
+        profile.carbs = current_carbs;
         // TODO(jparr721) Finish this impl
         // TODO(jparr721) Add reading class impl
       }

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -50,7 +51,6 @@ namespace bob {
                         | |_) | (_) | |_) |
                         |____/ \___/|_.__/
                     )";
-
 
     private:
       std::string infile;

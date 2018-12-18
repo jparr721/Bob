@@ -1,6 +1,15 @@
-#include <core/reading>
+#include <core/reading.h>
 
 namespace bob {
+  Reading Reading::make_reading(Profile const& p, int time = -1) {
+    Reading r;
+    r.glucose = p->glucose;
+    r.carbs = p->carbs;
+    r.time = time;
+
+    return r;
+  }
+
   void Reading::set_glucose(double glucose) {
     this->glucose = glucose;
   }

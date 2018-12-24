@@ -1,7 +1,10 @@
 #pragma once
 
 #include <core/core.h>
+#include <core/reading.h>
 #include <core/profile.h>
+
+#include <queue>
 
 namespace bob {
   class Naive : public Core {
@@ -9,8 +12,7 @@ namespace bob {
       Naive() = default;
       ~Naive() = default;
 
-      auto naive_sim [](Profile const& profile)->void;
-      void runner();
+      std::queue<Reading> naive_sim(std::unique_ptr<Profile> const& profile);
       const std::string OPTS =
           R"(
 Bob Naive Model

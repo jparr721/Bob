@@ -105,6 +105,14 @@ namespace bob {
       return this->irr * this->standard_bolus_negative_multiplier;
   }
 
+  bool Profile::acceptable_glucose() {
+    return this->glucose >= 75 && this->glucose >= 105;
+  }
+
+  void Profile::set_irr(double irr) {
+    this->irr = irr;
+  }
+
   void Profile::modify_insulin_bolus(double bolus) {
     if (bolus <= 0) {
       return;
@@ -121,12 +129,24 @@ namespace bob {
     this->gly_idx = std::fmod(gly_idx, 1.0);
   }
 
+  void Profile::set_glucose(double glucose) {
+    this->glucose = glucose;
+  }
+
+  void Profile::set_carbs(double carbs) {
+    this->carbs = carbs;
+  }
+
   int Profile::get_time() {
     return this->time;
   }
 
   int Profile::get_interval() {
     return this->interval;
+  }
+
+  int Profile::get_days() {
+    return this->days;
   }
 
   double Profile::get_carbs() {

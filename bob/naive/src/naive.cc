@@ -1,9 +1,10 @@
-#include <core/reading.h>
-#include <core/util.h>
 #include <naive/naive.h>
+#include <core/util.h>
 
 #include <cmath>
 #include <iostream>
+#include <memory>
+#include <queue>
 #include <unordered_map>
 #include <vector>
 
@@ -11,68 +12,45 @@
 // to make the naive predictor more intelligent...
 
 namespace bob {
-  auto Naive::naive_sim [](Profile const& profile)->void {
+  std::queue<Reading> Naive::naive_sim(std::unique_ptr<Profile> const& profile) {
     this->show_logo();
+    std::queue<Reading> outputs;
+    Util u;
 
     float current_glucose, current_carbs;
-    size_t meal_count = profile.meals.size();
+    std::vector<float> meals = profile->get_meals();
+    size_t meal_count = meals.size();
 
     // Idea: logger class that takes a map of data labels, then
     // inside of here just print based on the label via a built
     // in print() function that will be formatted accoring to the
     // map...
-    for (int i = 1; i < profile.days; ++i) {
-      for (int j = 1; j < profile.get_time(); ++j) {
+    for (int i = 1; i < profile->get_days(); ++i) {
+      for (int j = 1; j < profile->get_time(); ++j) {
+        Reading r;
         current_glucose = this->glucose_diffusion(
-           profile.meals[i % meal_count],
-           profile.glucose,
-           profile.irr,
-           profile.gly_idx,
-           j];
-        profile.glucose = current_glucose;
+           meals[i % meal_count],
+           profile->get_glucose(),
+           profile->get_irr(),
+           profile->get_gly_idx(),
+           j);
+        profile->set_glucose(current_glucose);
+        u.log<double>("Current glucose", profile->get_glucose());
         current_carbs = this->carbohydrate_diffusion(
-          profile.meals[i % meal_count],
-          profile.gly_idx,
-          j];
-        profile.carbs = current_carbs;
-        // TODO(jparr721) Finish this impl
-        // TODO(jparr721) Add reading class impl
+          meals[i % meal_count],
+          profile->get_gly_idx(),
+          j);
+        profile->set_carbs(current_carbs);
+        u.log<double>("Current carbs", profile->get_carbs());
+        if (!profile->acceptable_glucose()) {
+          double profile_glucose = profile->get_glucose();
+          profile->set_irr(profile->modulate_irr(profile_glucose));
+        }
+        u.log<double>("Current insulin release rate", profile->get_irr());
+        outputs.push(r.make_reading(profile, j * i));
       }
     }
-  }
-  void Naive::simulate(const std::string profile) {
-    this->show_logo();
 
-    float glucose_level, carb_level;
-    // Loop forever
-    std::cout << "Initialization complete, running simulation..." << std::endl;
-    for (int i = 1; i < 2; ++i) {
-      std::cout << "Initialization complete, running simulation..." << std::endl;
-      int total_entries = new_carbs.size();
-
-      // Runs for each time in the interval
-      for (int j = 1; j < time; ++j) {
-        std::cout << "Time Elapsed: " << j << " minutes" << std::endl;
-        glucose_level = this->glucose_diffusion(
-            new_carbs[i % total_entries],
-            glucose,
-            this->bolus,
-            this->glycemic_index,
-            j);
-        glucose = glucose_level;
-        std::cout << "Glucose level currently is: " << glucose << std::endl;
-        carb_level = this->carbohydrate_diffusion(
-            new_carbs[i % total_entries],
-            this->glycemic_index,
-            j);
-        carbs = carb_level;
-        std::cout << "Carb level currently is: " << carbs << std::endl;
-
-        // Our "dumb" predictor to adjust insulin release rates
-        /* this->verify_insulin_dispersion(glucose_level); */
-        std::cout << "Current insulin release rate: " << this->bolus << std::endl;
-        std::cout << "------------------------------" << std::endl;
-      }
-    }
+    return outputs;
   }
 } // namespace bob

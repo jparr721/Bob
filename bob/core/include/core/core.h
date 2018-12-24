@@ -1,5 +1,4 @@
-/**
- * Copyright 2018- GVSU DEN Research Lab
+ /* Copyright 2018- GVSU DEN Research Lab
  *
  * Licensed under the GNU Public License, Version 3.0
  * you may not use this file except in compliance with
@@ -18,8 +17,12 @@
  * *****************************************************/
 
 #pragma once
+#include <core/profile.h>
+#include <core/reading.h>
 
 #include <functional>
+#include <memory>
+#include <queue>
 #include <string>
 #include <vector>
 
@@ -39,8 +42,6 @@ namespace bob {
       void set_initial_glucose(float glucose);
       void usage(const std::string opts) const;
       void show_logo() const;
-
-      auto simulate(const std::string profile, std::function<void(...)> sim);
 
       const std::string appversion = "4.8.0";
       const std::string bob_logo =

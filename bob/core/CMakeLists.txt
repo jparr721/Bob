@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(BobCore SHARED
   src/core.cc
   src/util.cc
+  src/reading.cc
+  src/profile.cc
 )
 
 target_include_directories(BobCore

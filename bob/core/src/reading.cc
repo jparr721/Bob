@@ -1,7 +1,7 @@
 #include <core/reading.h>
 
 namespace bob {
-  Reading Reading::make_reading(Profile const& p, int time = -1) {
+  Reading Reading::make_reading(std::unique_ptr<Profile> const& p, int time = -1) {
     Reading r;
     r.glucose = p->glucose;
     r.carbs = p->carbs;
@@ -44,6 +44,19 @@ namespace bob {
     this->glucose = r.glucose;
     this->carbs = r.carbs;
     this->time = r.time;
+  }
+
+  std::string Reading::to_string() {
+    std::ostream os;
+    os << "{ " <<
+    r.glucose <<
+    ", " <<
+    r.carbs <<
+    ", " <<
+    r.time <<
+    " }";
+
+    return os.str();
   }
 
   std::ostream& operator<<(std::ostream& os, Reading const& r) {

@@ -17,13 +17,15 @@
 #pragma once
 #include <core/profile.h>
 
+#include <memory>
 #include <sstream>
 
 namespace bob {
   class Reading {
     public:
+      Reading() = default;
       ~Reading() = default;
-      Reading make_reading(Profile const& p, int time);
+      Reading make_reading(std::unique_ptr<Profile> const& p, int time);
 
       void set_glucose(double glucose);
       void set_carbs(double carbs);
@@ -34,6 +36,8 @@ namespace bob {
       double get_carbs();
 
       int get_time();
+
+      std::string to_string();
 
       bool operator==(Reading const& r) const;
 

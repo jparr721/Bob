@@ -31,17 +31,22 @@ namespace bob {
       void indexer(std::string const& profile_path);
       void modify_insulin_bolus(double bolus);
       void operator=(Profile const& p);
-      void modulate_irr(double glucose);
+      void set_glucose(double glucose);
+      void set_carbs(double carbs);
+      void set_irr(double irr);
 
       bool operator==(Profile const& p) const;
+      bool acceptable_glucose();
 
       int get_time();
       int get_interval();
+      int get_days();
 
       double get_carbs();
       double get_glucose();
       double get_irr();
       double get_gly_idx();
+      double modulate_irr(double glucose);
 
       std::vector<float> get_meals();
 

@@ -2,6 +2,7 @@
 #include <core/util.h>
 
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 
 namespace bob {
@@ -11,19 +12,19 @@ namespace bob {
 
   void Profile::operator=(Profile const& p) {
     this->time_between_meals = p.get_time();
-    this->interval = p.interval;
-    this->carbs = p.carbs;
-    this->glucose = p.glucose;
-    this->irr = p.irr;
-    this->gly_idx = p.gly_idx;
-    this->meals = p.meals;
+    this->interval = p.get_interval();
+    this->carbs = p.get_carbs();
+    this->glucose = p.get_glucose();
+    this->irr = p.get_irr();
+    this->gly_idx = p.get_gly_idx();
+    this->meals = p.get_meals();
   }
 
   bool Profile::operator==(Profile const& p) const {
     return this->time_between_meals == p.get_time() &&
       this->interval == p.get_interval() &&
       this->carbs == p.get_carbs() &&
-      this->glucose == p.get_glucose() &&
+      this->glucose == p.get_glucose();
   }
 
   std::ostream& operator<<(std::ostream& os, Profile const& p) {
@@ -40,8 +41,8 @@ namespace bob {
       ", " <<
       p.get_gly_idx() <<
       ", [";
-    auto meals = p.get_meals()
-    for (auto i = 0; i < meals.size() - 1; ++i)
+    auto meals = p.get_meals();
+    for (auto i = 0u; i < meals.size() - 1; ++i)
       os << meals[i] << ", ";
     os << meals[meals.size()] << " ";
     os << "] }";
@@ -54,7 +55,7 @@ namespace bob {
 
     // Load in our initial profile stats
     std::vector<std::string> initial_stats = u.split_by_space(lines[0]);
-    if (!initial_stats[0] == "I") throw std::invalid_argument("Invalid profile sequence(initial stats)");
+    if (!(initial_stats[0] == "I")) throw std::invalid_argument("Invalid profile sequence(initial stats)");
     try {
       this->time_between_meals = std::stoi(initial_stats[1]);
       this->carbs = std::stof(initial_stats[2]);
@@ -74,14 +75,14 @@ namespace bob {
 
     // Load in the thresholds
     std::vector<std::string> thresholds = u.split_by_space(lines[1]);
-    if (!thresholds[0] == "T") throw std::invalid_argument("Invalid profile sequence(thresholds)");
+    if (!(thresholds[0] == "T")) throw std::invalid_argument("Invalid profile sequence(thresholds)");
     try {
-      this->maximum_upper_threshold = thresholds[1];
-      this->upper_threshold = thresholds[2];
-      this->lower_threshold = thresholds[3];
-      this->maximum_lower_threshold = thresholds[4];
-      this->standard_bolus_negative_multiplier = thresholds[5];
-      this->standard_bolus_positive_multiplier = thresholds[6];
+      this->maximum_upper_threshold = std::stoi(thresholds[1]);
+      this->upper_threshold = std::stoi(thresholds[2]);
+      this->lower_threshold = std::stoi(thresholds[3]);
+      this->maximum_lower_threshold = std::stoi(thresholds[4]);
+      this->standard_bolus_negative_multiplier = std::stof(thresholds[5]);
+      this->standard_bolus_positive_multiplier = std::stof(thresholds[6]);
     } catch (std::out_of_range const& oor) {
       std::cerr << "Invalid number of thresholds supplied, check your config file" << std::endl;
       return;
@@ -91,7 +92,10 @@ namespace bob {
     std::vector<std::string> meals_string = u.split_by_space(lines[2]);
     std::vector<float> meals;
     meals.reserve(meals_string.size());
-    for (auto meal = meals.begin() + 1; meal != meals.end(); ++meal) meals.push_back(std::stof(*meal));
+
+    for (auto meal = meals.begin() + 1; meal != meals.end(); ++meal) {
+      meals.push_back(*meal);
+    }
   }
 
   double Profile::modulate_irr(double glucose) {
@@ -138,35 +142,35 @@ namespace bob {
     this->carbs = carbs;
   }
 
-  int Profile::get_time() {
-    return this->time;
+  int Profile::get_time() const {
+    return this->time_between_meals;
   }
 
-  int Profile::get_interval() {
+  int Profile::get_interval() const {
     return this->interval;
   }
 
-  int Profile::get_days() {
+  int Profile::get_days() const {
     return this->days;
   }
 
-  double Profile::get_carbs() {
+  double Profile::get_carbs() const {
     return this->carbs;
   }
 
-  double Profile::get_glucose() {
+  double Profile::get_glucose() const {
     return this->glucose;
   }
 
-  double Profile::get_irr() {
+  double Profile::get_irr() const {
     return this->irr;
   }
 
-  double Profile::get_gly_idx() {
+  double Profile::get_gly_idx() const {
     return this->gly_idx;
   }
 
-  std::vector<float> Profile::get_meals() {
+  std::vector<float> Profile::get_meals() const {
     return this->meals;
   }
 } // namespace bob

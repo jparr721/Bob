@@ -5,12 +5,12 @@
 #include <stdexcept>
 
 namespace bob {
-  Pofile::Profile(std::string const& profile_path) {
+  Profile::Profile(std::string const& profile_path) {
     this->indexer(profile_path);
   }
 
   void Profile::operator=(Profile const& p) {
-    this->time = p.time;
+    this->time_between_meals = p.get_time();
     this->interval = p.interval;
     this->carbs = p.carbs;
     this->glucose = p.glucose;
@@ -20,29 +20,30 @@ namespace bob {
   }
 
   bool Profile::operator==(Profile const& p) const {
-    return this->time == p.time &&
-      this->interval == p.interval &&
-      this->carbs == p.carbs &&
-      this->glucose == p.glucose &&
+    return this->time_between_meals == p.get_time() &&
+      this->interval == p.get_interval() &&
+      this->carbs == p.get_carbs() &&
+      this->glucose == p.get_glucose() &&
   }
 
   std::ostream& operator<<(std::ostream& os, Profile const& p) {
     os << "{ " <<
-      p.time <<
+      p.get_time() <<
       ", " <<
-      p.interval <<
+      p.get_interval() <<
       ", " <<
-      p.carbs <<
+      p.get_carbs() <<
       ", " <<
-      p.glucose <<
+      p.get_glucose() <<
       ", " <<
-      p.irr <<
+      p.get_irr() <<
       ", " <<
-      p.gly_idx <<
+      p.get_gly_idx() <<
       ", [";
-    for (auto i = 0; i < p.meals.size() - 1; ++i)
-      os << p.meals[i] << ", ";
-    os << p.meals[p.meals.size()] << " ";
+    auto meals = p.get_meals()
+    for (auto i = 0; i < meals.size() - 1; ++i)
+      os << meals[i] << ", ";
+    os << meals[meals.size()] << " ";
     os << "] }";
     return os;
   }
@@ -55,7 +56,7 @@ namespace bob {
     std::vector<std::string> initial_stats = u.split_by_space(lines[0]);
     if (!initial_stats[0] == "I") throw std::invalid_argument("Invalid profile sequence(initial stats)");
     try {
-      this->time = std::stoi(initial_stats[1]);
+      this->time_between_meals = std::stoi(initial_stats[1]);
       this->carbs = std::stof(initial_stats[2]);
       this->glucose = std::stof(initial_stats[3]);
       this->irr = std::stof(initial_stats[4]);

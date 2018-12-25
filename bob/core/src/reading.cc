@@ -2,12 +2,12 @@
 
 namespace bob {
   Reading Reading::make_reading(std::unique_ptr<Profile> const& p, int time = -1) {
-    Reading r;
-    r.glucose = p->glucose;
-    r.carbs = p->carbs;
-    r.time = time;
+    Reading *reading = new Reading();
+    reading->set_glucose(p->get_glucose());
+    reading->set_carbs(p->get_carbs());
+    reading->set_time(time);
 
-    return r;
+    return *reading;
   }
 
   void Reading::set_glucose(double glucose) {
@@ -30,7 +30,7 @@ namespace bob {
     return this->carbs;
   }
 
-  int Raading::get_time() {
+  int Reading::get_time() {
     return this->time;
   }
 
@@ -47,13 +47,14 @@ namespace bob {
   }
 
   std::string Reading::to_string() {
-    std::ostream os;
+    Reading r;
+    std::stringstream os;
     os << "{ " <<
-    r.glucose <<
+    r.get_glucose() <<
     ", " <<
-    r.carbs <<
+    r.get_carbs() <<
     ", " <<
-    r.time <<
+    r.get_time() <<
     " }";
 
     return os.str();

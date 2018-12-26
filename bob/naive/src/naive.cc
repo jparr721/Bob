@@ -35,18 +35,18 @@ namespace bob {
            profile->get_gly_idx(),
            j);
         profile->set_glucose(current_glucose);
-        u.log<double>("Current glucose", profile->get_glucose());
+        /* u.log<double>("Current glucose", profile->get_glucose()); */
         current_carbs = this->carbohydrate_diffusion(
           meals[i % meal_count],
           profile->get_gly_idx(),
           j);
         profile->set_carbs(current_carbs);
-        u.log<double>("Current carbs", profile->get_carbs());
+        /* u.log<double>("Current carbs", profile->get_carbs()); */
         if (!profile->acceptable_glucose()) {
           double profile_glucose = profile->get_glucose();
           profile->set_irr(profile->modulate_irr(profile_glucose));
         }
-        u.log<double>("Current insulin release rate", profile->get_irr());
+        /* u.log<double>("Current insulin release rate", profile->get_irr()); */
         outputs.push(r.make_reading(profile, j * i));
       }
     }

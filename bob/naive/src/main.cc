@@ -1,5 +1,6 @@
 #include <core/core.h>
 #include <core/profile.h>
+#include <core/util.h>
 #include <naive/naive.h>
 
 #include <memory>

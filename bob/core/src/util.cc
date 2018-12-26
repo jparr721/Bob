@@ -30,33 +30,9 @@ namespace bob {
                                      std::istream_iterator<std::string>{}};
   }
 
-  std::vector<std::string> Util::format_data(
-      std::vector<float> carbs,
-      std::vector<float> glucose,
-      int time,
-      int interval) const {
-    std::vector<std::string> output_vector;
-    // Before storage, verify uniform sizing on input vectors
-    if (carbs.size() != glucose.size()) {
-      throw new std::invalid_argument("Input vectors are not the same size, output will be improper");
-    }
-
-    // Use a string stream to build our file lines
-    std::ostringstream run_header, data_line;
-    run_header << "Carbohydrates over " << time << " min " << "Glucose over " << time << " min";
-
-    data_line << "Initial Levels: " << carbs[0] << " carbs " << glucose[0] << " glucose" << std::endl;
-    output_vector.push_back(data_line.str());
-    int timestamp = 0;
-
-    for (auto it1 = carbs.begin(), it2 = glucose.begin();
-        it1 != carbs.end() && it2 != glucose.end(); ++it1, ++it2) {
-      data_line << timestamp << " minutes" << *it1 << " " << timestamp << " minutes: " << *it2;
-      output_vector.push_back(data_line.str());
-      timestamp += interval;
-    }
-
-    return output_vector;
+  template<typename T>
+  void Util::log(std::string label, T data) const {
+    std::cout << label << ": " << data << std::endl;
   }
 
   void Util::write_to_file(std::vector<std::string> output_vector) const {

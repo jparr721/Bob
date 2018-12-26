@@ -1,88 +1,56 @@
-#include <core/util.h>
 #include <naive/naive.h>
+#include <core/util.h>
 
 #include <cmath>
 #include <iostream>
+#include <memory>
+#include <queue>
 #include <unordered_map>
 #include <vector>
 
+// Idea; make a reading creator function to store previous outputs
+// to make the naive predictor more intelligent...
+
 namespace bob {
-  void Naive::adjust_insulin_bolus(double bolus) {
-    if (bolus <= 0) {
-      return;
-    }
-    this->bolus = bolus;
-  }
-
-  double Naive::get_insulin_bolus() {
-    return this->bolus;
-  }
-
-  void Naive::simulate(const std::string profile) {
+  std::queue<Reading> Naive::naive_sim(std::unique_ptr<Profile> const& profile) {
     this->show_logo();
+    std::queue<Reading> outputs;
     Util u;
-    // Load in our user profile
-    std::vector<std::string> lines = u.read_file(profile);
-    int time, interval;
-    double carbs, glucose, bolus_init, glycemic_index;
 
-    std::vector<std::string> initial_vals = u.split_by_space(lines[0]);
-    time = std::stoi(initial_vals[0]);
-    interval = std::stoi(initial_vals[5]);
-    carbs = std::stof(initial_vals[1]);
-    glucose = std::stof(initial_vals[2]);
-    bolus_init = std::stof(initial_vals[3]);
-    glycemic_index = std::stof(initial_vals[4]);
+    float current_glucose, current_carbs;
+    std::vector<float> meals = profile->get_meals();
+    size_t meal_count = meals.size();
 
-    std::vector<int> new_carbs(lines.size() - 2);
-
-    for (auto i = 1u; i < lines.size(); ++i) {
-      new_carbs.push_back(lines[0][i]);
-    }
-
-    float glucose_level, carb_level;
-    // Loop forever
-    for (int i = 0; i < 1; ++i) {
-      int total_entries = new_carbs.size();
-
-      // Runs for each time in the interval
-      for (int j = 0; j < time; ++j) {
-        glucose_level = this->glucose_diffusion(
-            new_carbs[i % total_entries],
-            glucose,
-            this->bolus,
-            this->glycemic_index,
-            i);
-        glucose = glucose_level;
-        std::cout << "Glucose level currently is: " << glucose_level << std::endl;
-        carb_level = this->carbohydrate_diffusion(
-            new_carbs[i % total_entries],
-            this->glycemic_index,
-            i);
-        carbs = carb_level;
-        std::cout << "Carb level currently is: " << carb_level << std::endl;
-
-        // Our "dumb" predictor to adjust insulin release rates
-        this->verify_insulin_dispersion(glucose_level);
-        std::cout << "Current insulin release rate: " << this->bolus << std::endl;
+    // Idea: logger class that takes a map of data labels, then
+    // inside of here just print based on the label via a built
+    // in print() function that will be formatted accoring to the
+    // map...
+    for (int i = 1; i < profile->get_days(); ++i) {
+      for (int j = 1; j < profile->get_time(); ++j) {
+        Reading r;
+        current_glucose = this->glucose_diffusion(
+           meals[i % meal_count],
+           profile->get_glucose(),
+           profile->get_irr(),
+           profile->get_gly_idx(),
+           j);
+        profile->set_glucose(current_glucose);
+        /* u.log<double>("Current glucose", profile->get_glucose()); */
+        current_carbs = this->carbohydrate_diffusion(
+          meals[i % meal_count],
+          profile->get_gly_idx(),
+          j);
+        profile->set_carbs(current_carbs);
+        /* u.log<double>("Current carbs", profile->get_carbs()); */
+        if (!profile->acceptable_glucose()) {
+          double profile_glucose = profile->get_glucose();
+          profile->set_irr(profile->modulate_irr(profile_glucose));
+        }
+        /* u.log<double>("Current insulin release rate", profile->get_irr()); */
+        outputs.push(r.make_reading(profile, j * i));
       }
     }
-  }
 
-  void Naive::verify_insulin_dispersion(float current_glucose) {
-    //TODO -- Try to make this cleaner? Maybe?
-    if (current_glucose >= this->UPPER_THRESHOLD &&
-        current_glucose < this->MAXIMUM_UPPER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_POSITIVE_MULTIPLIER);
-    } else if (current_glucose > this->MAXIMUM_UPPER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_POSITIVE_MULTIPLIER, 2));
-    } else if (current_glucose <= this->LOWER_THRESHOLD &&
-        current_glucose > this->MAXIMUM_LOWER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER);
-    } else if (current_glucose < this->MAXIMUM_LOWER_THRESHOLD) {
-      this->adjust_insulin_bolus(this->bolus * pow(this->STANDARD_BOLUS_NEGATIVE_MULTIPLIER, 2));
-    } else {
-      return;
-    }
+    return outputs;
   }
 } // namespace bob

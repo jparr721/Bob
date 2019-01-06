@@ -1,6 +1,7 @@
 #include <core/profile.h>
 #include <core/util.h>
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
@@ -25,6 +26,16 @@ namespace bob {
       this->interval == p.get_interval() &&
       this->carbs == p.get_carbs() &&
       this->glucose == p.get_glucose();
+  }
+
+  std::string Profile::make_run_stats() const {
+    std::stringstream stats;
+    stats << "\n\nThanks for stopping by! Here's the run agenda for today:\n"
+      << "Time between meals: " << this->time_between_meals << " minutes\n"
+      << "Total runtime (in days): " << this->days << "\n"
+      << "Diabetes: " << this->has_diabetes << "\n";
+
+    return stats.str();
   }
 
   std::ostream& operator<<(std::ostream& os, Profile const& p) {
@@ -57,26 +68,32 @@ namespace bob {
     std::vector<std::string> initial_stats = u.split_by_space(lines[0]);
     if (!(initial_stats[0] == "I")) throw std::invalid_argument("Invalid profile sequence(initial stats)");
     try {
+      std::cout << "unpacking: " << initial_stats.size() << " items" << std::endl;
       this->time_between_meals = std::stoi(initial_stats[1]);
       this->carbs = std::stof(initial_stats[2]);
       this->glucose = std::stof(initial_stats[3]);
       this->irr = std::stof(initial_stats[4]);
       this->gly_idx = std::stof(initial_stats[5]);
       this->interval = std::stoi(initial_stats[6]);
-      this->has_diabetes = std::stoi(initial_stats[7]);
+      this->has_diabetes = u.string_to_bool(initial_stats[7]);
       this->days = std::stoi(initial_stats[8]);
     } catch (std::out_of_range const& oor) {
       std::cerr << "Invalid number of initial configs supplied, check your config file" << std::endl;
       return;
     }
+    std::cout << "items unpacked, moving on with setup..." << std::endl;
     // Cannot set to 0 or it breaks the algorithm
-    if (has_diabetes) this->irr = 0.0001;
-
+    if (has_diabetes) {
+      std::cout << "Diabetes detected changing irr to 0.0001" << std::endl;
+      this->irr = 0.0001;
+      std::cout << "irr is now: " << this->irr << std::endl;
+    }
 
     // Load in the thresholds
     std::vector<std::string> thresholds = u.split_by_space(lines[1]);
     if (!(thresholds[0] == "T")) throw std::invalid_argument("Invalid profile sequence(thresholds)");
     try {
+      std::cout << "unpacking: " << thresholds.size() << " items" << std::endl;
       this->maximum_upper_threshold = std::stoi(thresholds[1]);
       this->upper_threshold = std::stoi(thresholds[2]);
       this->lower_threshold = std::stoi(thresholds[3]);
@@ -87,15 +104,20 @@ namespace bob {
       std::cerr << "Invalid number of thresholds supplied, check your config file" << std::endl;
       return;
     }
+    std::cout << "items unpacked, moving on with setup..." << std::endl;
 
     // Load in the meals
     std::vector<std::string> meals_string = u.split_by_space(lines[2]);
-    std::vector<float> meals;
-    meals.reserve(meals_string.size());
+    if (!(meals_string[0] == "M")) throw std::invalid_argument("Invalid profile sequence(meals)");
+    std::cout << "loading: " << meals_string.size() << " meals" << std::endl;
 
-    for (auto meal = meals.begin() + 1; meal != meals.end(); ++meal) {
-      meals.push_back(*meal);
-    }
+    std::vector<float> meals(meals_string.size() - 1);
+    std::transform(meals_string.begin() + 1, meals_string.end(), meals.begin(), [](const std::string& val) {
+      return std::stof(val);
+    });
+    this->meals = meals;
+
+    std::cout << "meals loaded successfully, moving on with sim" << std::endl;
   }
 
   double Profile::modulate_irr(double glucose) {

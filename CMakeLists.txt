@@ -10,6 +10,8 @@ set(BOB_VERSION
 set(INSTALL_LIB_DIR lib CACHE PATH "Install directory for library code")
 set(INSTALL_BIN_DIR CACHE PATH "Install directory for executables")
 set(INSTALL_INCLUDE_DIR include CACHE PATH "Instal directory for header files")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 
 if(WIN32 AND NOT CYGWIN)
   set(DEF_INSTALL_CMAKE_DIR CMake)

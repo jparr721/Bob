@@ -15,6 +15,9 @@ int main(int argc, char** argv) {
   }
 
   std::unique_ptr<bob::Profile> p(new bob::Profile(std::string(argv[1])));
-  n.naive_sim(p);
+  std::vector<bob::Reading> outputs = n.naive_sim(p);
+  std::for_each(outputs.begin(), outputs.end(), [&](const auto& reading) {
+    std::cout << reading << std::endl;
+  });
   return EXIT_SUCCESS;
 }

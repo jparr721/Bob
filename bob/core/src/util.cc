@@ -48,4 +48,8 @@ namespace bob {
 
     std::cout << "Done writing to file..." << std::endl;
   }
+
+  bool Util::string_to_bool(std::string bool_val) const {
+    return bool_val != "0";
+  }
 } // namespace bob

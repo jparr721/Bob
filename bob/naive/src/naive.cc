@@ -1,10 +1,10 @@
 #include <naive/naive.h>
 #include <core/util.h>
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <memory>
-#include <queue>
 #include <unordered_map>
 #include <vector>
 
@@ -12,24 +12,25 @@
 // to make the naive predictor more intelligent...
 
 namespace bob {
-  std::queue<Reading> Naive::naive_sim(std::unique_ptr<Profile> const& profile) {
+  /* template<bool with_logging> */
+  std::vector<Reading> Naive::naive_sim(std::unique_ptr<Profile> const& profile) {
+    std::string stats = profile->make_run_stats();
+    std::cout << stats << std::endl;
     this->show_logo();
-    std::queue<Reading> outputs;
+    std::vector<Reading> outputs;
     Util u;
 
     float current_glucose, current_carbs;
     std::vector<float> meals = profile->get_meals();
-    size_t meal_count = meals.size();
+    int meal_count = meals.size();
+    int days = profile->get_days();
+    int time = profile->get_time();
 
-    // Idea: logger class that takes a map of data labels, then
-    // inside of here just print based on the label via a built
-    // in print() function that will be formatted accoring to the
-    // map...
-    for (int i = 1; i < profile->get_days(); ++i) {
-      for (int j = 1; j < profile->get_time(); ++j) {
+    for (int i = 0; i < days; ++i) {
+      for (int j = 1; j < time; ++j) {
         Reading r;
         current_glucose = this->glucose_diffusion(
-           meals[i % meal_count],
+           meals[std::fmod(i, meal_count)],
            profile->get_glucose(),
            profile->get_irr(),
            profile->get_gly_idx(),
@@ -37,7 +38,7 @@ namespace bob {
         profile->set_glucose(current_glucose);
         /* u.log<double>("Current glucose", profile->get_glucose()); */
         current_carbs = this->carbohydrate_diffusion(
-          meals[i % meal_count],
+          meals[std::fmod(i, meal_count)],
           profile->get_gly_idx(),
           j);
         profile->set_carbs(current_carbs);
@@ -47,7 +48,7 @@ namespace bob {
           profile->set_irr(profile->modulate_irr(profile_glucose));
         }
         /* u.log<double>("Current insulin release rate", profile->get_irr()); */
-        outputs.push(r.make_reading(profile, j * i));
+        outputs.push_back(r.make_reading(profile, j * i));
       }
     }
 

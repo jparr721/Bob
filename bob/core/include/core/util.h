@@ -15,5 +15,7 @@ namespace bob {
 
       std::vector<std::string> read_file(std::string path) const;
       std::vector<std::string> split_by_space(std::string input) const;
+
+      bool string_to_bool(std::string bool_val) const;
   };
 } // namespace bob

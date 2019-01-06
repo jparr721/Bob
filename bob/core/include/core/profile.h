@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <string>
 #include <sstream>
 #include <vector>
 
@@ -50,6 +51,8 @@ namespace bob {
       double modulate_irr(double glucose);
 
       std::vector<float> get_meals() const;
+
+      std::string make_run_stats() const;
 
       friend std::ostream& operator<<(std::ostream& os, Profile const& p);
     private:

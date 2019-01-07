@@ -29,7 +29,7 @@ namespace bob {
     for (int i = 0; i < days; ++i) {
       for (int j = 1; j < time; ++j) {
         Reading r;
-        current_glucose = this->glucose_diffusion(
+        current_glucose = glucose_diffusion(
            meals[std::fmod(i, meal_count)],
            profile->get_glucose(),
            profile->get_irr(),
@@ -37,7 +37,7 @@ namespace bob {
            j);
         profile->set_glucose(current_glucose);
         /* u.log<double>("Current glucose", profile->get_glucose()); */
-        current_carbs = this->carbohydrate_diffusion(
+        current_carbs = carbohydrate_diffusion(
           meals[std::fmod(i, meal_count)],
           profile->get_gly_idx(),
           j);

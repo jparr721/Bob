@@ -33,13 +33,9 @@ namespace bob {
       Core(int carbs, int glucose) : initial_carbs(carbs), initial_glucose(glucose) {};
       ~Core() = default;
 
-      float get_initial_carbs() const;
-      float get_initial_glucose() const;
       float carbohydrate_diffusion(float carbs, float glycemic_index, int time) const;
       float glucose_diffusion(float carbs, float glucose, float irr, float gly_index, int time) const;
 
-      void set_initial_carbs(float carbs);
-      void set_initial_glucose(float glucose);
       void usage(const std::string opts) const;
       void show_logo() const;
 

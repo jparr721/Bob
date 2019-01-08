@@ -29,30 +29,14 @@
 #include <stdexcept>
 
 namespace bob {
-  void Core::set_initial_carbs(float carbs) {
-    this->initial_carbs = carbs;
-  }
-
-  float Core::get_initial_carbs() const {
-    return this->initial_carbs;
-  }
-
-  void Core::set_initial_glucose(float glucose) {
-    this->initial_glucose = glucose;
-  }
-
-  float Core::get_initial_glucose() const {
-    return this->initial_glucose;
-  }
-
   void Core::usage(std::string opts) const {
-    this->show_logo();
+    show_logo();
     std::cout << opts << std::endl;
   }
 
   void Core::show_logo() const {
-    std::cout << this->bob_logo << std::endl;
-    std::cout << "Version: " << this->appversion << std::endl;
+    std::cout << bob_logo << std::endl;
+    std::cout << "Version: " << appversion << std::endl;
   }
 
   float Core::carbohydrate_diffusion(float carbs, float glycemic_index, int time) const {
@@ -60,7 +44,6 @@ namespace bob {
   }
 
   float Core::glucose_diffusion(float carbs, float glucose, float irr, float gly_index, int time) const {
-    std::cout << "here" << std::endl;
     return glucose - (carbs * (gly_index / irr - gly_index)) * (std::exp(
           -gly_index * time) - std::exp(-irr * time));
   }

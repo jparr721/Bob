@@ -26,6 +26,16 @@
 namespace bob {
   class Profile {
     public:
+      int time_between_meals;
+      int days;
+      int interval;
+
+      double carbs;
+      double glucose;
+      double irr;
+      double gly_idx;
+
+      std::vector<float> meals;
       Profile(std::string const& profile_path);
       ~Profile() = default;
 
@@ -33,24 +43,11 @@ namespace bob {
       void modify_insulin_bolus(double bolus);
       void modify_glycemic_index(double gly_idx);
       void operator=(Profile const& p);
-      void set_glucose(double glucose);
-      void set_carbs(double carbs);
-      void set_irr(double irr);
 
       bool operator==(Profile const& p) const;
       bool acceptable_glucose();
 
-      int get_time() const;
-      int get_interval() const;
-      int get_days() const;
-
-      double get_carbs() const;
-      double get_glucose() const;
-      double get_irr() const;
-      double get_gly_idx() const;
       double modulate_irr(double glucose);
-
-      std::vector<float> get_meals() const;
 
       std::string make_run_stats() const;
 
@@ -64,16 +61,5 @@ namespace bob {
       float standard_bolus_positive_multiplier = 1.25;
 
       bool has_diabetes = false;
-
-      int time_between_meals;
-      int days;
-      int interval;
-
-      double carbs;
-      double glucose;
-      double irr;
-      double gly_idx;
-
-      std::vector<float> meals;
   };
 }

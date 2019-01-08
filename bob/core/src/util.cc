@@ -30,11 +30,6 @@ namespace bob {
                                      std::istream_iterator<std::string>{}};
   }
 
-  template<typename T>
-  void Util::log(std::string label, T data) const {
-    std::cout << label << ": " << data << std::endl;
-  }
-
   void Util::write_to_file(std::vector<std::string> output_vector) const {
     std::ostringstream filename;
 

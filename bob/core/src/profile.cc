@@ -12,28 +12,28 @@ namespace bob {
   }
 
   void Profile::operator=(Profile const& p) {
-    this->time_between_meals = p.get_time();
-    this->interval = p.get_interval();
-    this->carbs = p.get_carbs();
-    this->glucose = p.get_glucose();
-    this->irr = p.get_irr();
-    this->gly_idx = p.get_gly_idx();
-    this->meals = p.get_meals();
+    time_between_meals = p.get_time();
+    interval = p.get_interval();
+    carbs = p.get_carbs();
+    glucose = p.get_glucose();
+    irr = p.get_irr();
+    gly_idx = p.get_gly_idx();
+    meals = p.get_meals();
   }
 
   bool Profile::operator==(Profile const& p) const {
-    return this->time_between_meals == p.get_time() &&
-      this->interval == p.get_interval() &&
-      this->carbs == p.get_carbs() &&
-      this->glucose == p.get_glucose();
+    return time_between_meals == p.time &&
+      interval == p.interval &&
+      carbs == p.carbs &&
+      glucose == p.gglucose;
   }
 
   std::string Profile::make_run_stats() const {
     std::stringstream stats;
     stats << "\n\nThanks for stopping by! Here's the run agenda for today:\n"
-      << "Time between meals: " << this->time_between_meals << " minutes\n"
-      << "Total runtime (in days): " << this->days << "\n"
-      << "Diabetes: " << this->has_diabetes << "\n";
+      << "Time between meals: " << time_between_meals << " minutes\n"
+      << "Total runtime (in days): " << days << "\n"
+      << "Diabetes: " << has_diabetes << "\n";
 
     return stats.str();
   }
@@ -136,10 +136,6 @@ namespace bob {
     return this->glucose >= 75 && this->glucose >= 105;
   }
 
-  void Profile::set_irr(double irr) {
-    this->irr = irr;
-  }
-
   void Profile::modify_insulin_bolus(double bolus) {
     if (bolus <= 0) {
       return;
@@ -154,45 +150,5 @@ namespace bob {
     }
 
     this->gly_idx = std::fmod(gly_idx, 1.0);
-  }
-
-  void Profile::set_glucose(double glucose) {
-    this->glucose = glucose;
-  }
-
-  void Profile::set_carbs(double carbs) {
-    this->carbs = carbs;
-  }
-
-  int Profile::get_time() const {
-    return this->time_between_meals;
-  }
-
-  int Profile::get_interval() const {
-    return this->interval;
-  }
-
-  int Profile::get_days() const {
-    return this->days;
-  }
-
-  double Profile::get_carbs() const {
-    return this->carbs;
-  }
-
-  double Profile::get_glucose() const {
-    return this->glucose;
-  }
-
-  double Profile::get_irr() const {
-    return this->irr;
-  }
-
-  double Profile::get_gly_idx() const {
-    return this->gly_idx;
-  }
-
-  std::vector<float> Profile::get_meals() const {
-    return this->meals;
   }
 } // namespace bob

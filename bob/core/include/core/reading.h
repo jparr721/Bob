@@ -23,29 +23,21 @@
 namespace bob {
   class Reading {
     public:
+      double glucose;
+      double carbs;
+      int time;
+
       Reading() = default;
       ~Reading() = default;
       Reading make_reading(std::unique_ptr<Profile> const& p, int time);
 
-      void set_glucose(double glucose);
-      void set_carbs(double carbs);
-      void set_time(int time);
       void operator=(Reading const& r);
-
-      double get_glucose();
-      double get_carbs();
-
-      int get_time();
 
       std::string to_string();
 
       bool operator==(Reading const& r) const;
 
       friend std::ostream& operator<<(std::ostream& os, Reading const& r);
-    private:
-      double glucose;
-      double carbs;
-      int time;
   };
 
 } // namespace bob

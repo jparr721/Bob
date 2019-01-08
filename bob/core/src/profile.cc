@@ -8,24 +8,24 @@
 
 namespace bob {
   Profile::Profile(std::string const& profile_path) {
-    this->indexer(profile_path);
+    indexer(profile_path);
   }
 
   void Profile::operator=(Profile const& p) {
-    time_between_meals = p.get_time();
-    interval = p.get_interval();
-    carbs = p.get_carbs();
-    glucose = p.get_glucose();
-    irr = p.get_irr();
-    gly_idx = p.get_gly_idx();
-    meals = p.get_meals();
+    time_between_meals = p.time_between_meals;
+    interval = p.interval;
+    carbs = p.carbs;
+    glucose = p.glucose;
+    irr = p.irr;
+    gly_idx = p.gly_idx;
+    meals = p.meals;
   }
 
   bool Profile::operator==(Profile const& p) const {
-    return time_between_meals == p.time &&
+    return time_between_meals == p.time_between_meals &&
       interval == p.interval &&
       carbs == p.carbs &&
-      glucose == p.gglucose;
+      glucose == p.glucose;
   }
 
   std::string Profile::make_run_stats() const {
@@ -40,19 +40,19 @@ namespace bob {
 
   std::ostream& operator<<(std::ostream& os, Profile const& p) {
     os << "{ " <<
-      p.get_time() <<
+      p.time_between_meals <<
       ", " <<
-      p.get_interval() <<
+      p.interval <<
       ", " <<
-      p.get_carbs() <<
+      p.carbs <<
       ", " <<
-      p.get_glucose() <<
+      p.glucose <<
       ", " <<
-      p.get_irr() <<
+      p.irr <<
       ", " <<
-      p.get_gly_idx() <<
+      p.gly_idx <<
       ", [";
-    auto meals = p.get_meals();
+    auto meals = p.meals;
     for (auto i = 0u; i < meals.size() - 1; ++i)
       os << meals[i] << ", ";
     os << meals[meals.size()] << " ";
@@ -69,14 +69,14 @@ namespace bob {
     if (!(initial_stats[0] == "I")) throw std::invalid_argument("Invalid profile sequence(initial stats)");
     try {
       std::cout << "unpacking: " << initial_stats.size() << " items" << std::endl;
-      this->time_between_meals = std::stoi(initial_stats[1]);
-      this->carbs = std::stof(initial_stats[2]);
-      this->glucose = std::stof(initial_stats[3]);
-      this->irr = std::stof(initial_stats[4]);
-      this->gly_idx = std::stof(initial_stats[5]);
-      this->interval = std::stoi(initial_stats[6]);
-      this->has_diabetes = u.string_to_bool(initial_stats[7]);
-      this->days = std::stoi(initial_stats[8]);
+      time_between_meals = std::stoi(initial_stats[1]);
+      carbs = std::stof(initial_stats[2]);
+      glucose = std::stof(initial_stats[3]);
+      irr = std::stof(initial_stats[4]);
+      gly_idx = std::stof(initial_stats[5]);
+      interval = std::stoi(initial_stats[6]);
+      has_diabetes = u.string_to_bool(initial_stats[7]);
+      days = std::stoi(initial_stats[8]);
     } catch (std::out_of_range const& oor) {
       std::cerr << "Invalid number of initial configs supplied, check your config file" << std::endl;
       return;
@@ -85,8 +85,8 @@ namespace bob {
     // Cannot set to 0 or it breaks the algorithm
     if (has_diabetes) {
       std::cout << "Diabetes detected changing irr to 0.0001" << std::endl;
-      this->irr = 0.0001;
-      std::cout << "irr is now: " << this->irr << std::endl;
+      irr = 0.0001;
+      std::cout << "irr is now: " << irr << std::endl;
     }
 
     // Load in the thresholds
@@ -94,12 +94,12 @@ namespace bob {
     if (!(thresholds[0] == "T")) throw std::invalid_argument("Invalid profile sequence(thresholds)");
     try {
       std::cout << "unpacking: " << thresholds.size() << " items" << std::endl;
-      this->maximum_upper_threshold = std::stoi(thresholds[1]);
-      this->upper_threshold = std::stoi(thresholds[2]);
-      this->lower_threshold = std::stoi(thresholds[3]);
-      this->maximum_lower_threshold = std::stoi(thresholds[4]);
-      this->standard_bolus_negative_multiplier = std::stof(thresholds[5]);
-      this->standard_bolus_positive_multiplier = std::stof(thresholds[6]);
+      maximum_upper_threshold = std::stoi(thresholds[1]);
+      upper_threshold = std::stoi(thresholds[2]);
+      lower_threshold = std::stoi(thresholds[3]);
+      maximum_lower_threshold = std::stoi(thresholds[4]);
+      standard_bolus_negative_multiplier = std::stof(thresholds[5]);
+      standard_bolus_positive_multiplier = std::stof(thresholds[6]);
     } catch (std::out_of_range const& oor) {
       std::cerr << "Invalid number of thresholds supplied, check your config file" << std::endl;
       return;
@@ -121,19 +121,19 @@ namespace bob {
   }
 
   double Profile::modulate_irr(double glucose) {
-    if (glucose >= this->maximum_upper_threshold)
-      return this->irr * pow(this->standard_bolus_positive_multiplier, 2);
-    else if (glucose < this->maximum_upper_threshold &&
-             glucose >= this->upper_threshold)
-      return this->irr * this->standard_bolus_positive_multiplier;
-    else if (glucose <= this->maximum_lower_threshold)
-      return this->irr * pow(this->standard_bolus_negative_multiplier, 2);
+    if (glucose >= maximum_upper_threshold)
+      return irr * pow(standard_bolus_positive_multiplier, 2);
+    else if (glucose < maximum_upper_threshold &&
+             glucose >= upper_threshold)
+      return irr * standard_bolus_positive_multiplier;
+    else if (glucose <= maximum_lower_threshold)
+      return irr * pow(standard_bolus_negative_multiplier, 2);
     else
-      return this->irr * this->standard_bolus_negative_multiplier;
+      return irr * standard_bolus_negative_multiplier;
   }
 
   bool Profile::acceptable_glucose() {
-    return this->glucose >= 75 && this->glucose >= 105;
+    return glucose >= 75 && glucose >= 105;
   }
 
   void Profile::modify_insulin_bolus(double bolus) {
@@ -141,7 +141,7 @@ namespace bob {
       return;
     }
 
-    this->irr = std::fmod(bolus, 1.0);
+    irr = std::fmod(bolus, 1.0);
   }
 
   void Profile::modify_glycemic_index(double gly_idx) {
@@ -149,6 +149,6 @@ namespace bob {
       return;
     }
 
-    this->gly_idx = std::fmod(gly_idx, 1.0);
+    gly_idx = std::fmod(gly_idx, 1.0);
   }
 } // namespace bob

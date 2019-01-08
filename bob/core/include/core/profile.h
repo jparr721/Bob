@@ -47,6 +47,8 @@ namespace bob {
       bool operator==(Profile const& p) const;
       bool acceptable_glucose();
 
+      double modulate_irr(double glucose);
+
       std::string make_run_stats() const;
 
       friend std::ostream& operator<<(std::ostream& os, Profile const& p);
@@ -55,8 +57,8 @@ namespace bob {
       int upper_threshold = 105;
       int lower_threshold = 75;
       int maximum_lower_threshold = 50;
-      const float standard_bolus_negative_multiplier = 0.75;
-      const float standard_bolus_positive_multiplier = 1.25;
+      float standard_bolus_negative_multiplier = 0.75;
+      float standard_bolus_positive_multiplier = 1.25;
 
       bool has_diabetes = false;
   };

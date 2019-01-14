@@ -37,7 +37,6 @@ namespace bob {
 
       std::vector<float> meals;
       Profile(std::string const& profile_path);
-      ~Profile() = default;
 
       void indexer(std::string const& profile_path);
       void modify_insulin_bolus(double bolus);

@@ -4,20 +4,17 @@
 #include <core/reading.h>
 #include <core/profile.h>
 
+#include <memory>
+
 namespace bob {
   class Naive : public Core {
     public:
-      Naive() = default;
-      ~Naive() = default;
+      const std::string OPTS = "Bob Naive\n usage: BobNaive <profile_path>";
 
-      std::vector<Reading> naive_sim(std::unique_ptr<Profile> const& profile);
-      const std::string OPTS =
-          R"(
-Bob Naive Model
+      void cycle();
 
-usage:
+      int simulation(int argc, char** argv);
 
-BobNaive <profile>
-          )";
+      std::vector<Reading> engine(std::unique_ptr<Profile> const& profile);
   };
 } // namespace bob

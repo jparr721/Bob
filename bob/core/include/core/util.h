@@ -7,9 +7,6 @@
 namespace bob {
   class Util {
     public:
-      Util() = default;
-      ~Util() = default;
-
       void write_to_file(std::vector<std::string> output_vector) const;
 
       template<typename T>

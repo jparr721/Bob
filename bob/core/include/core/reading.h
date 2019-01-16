@@ -27,8 +27,6 @@ namespace bob {
       double carbs;
       int time;
 
-      Reading() = default;
-      ~Reading() = default;
       Reading make_reading(std::unique_ptr<Profile> const& p, int time);
 
       void operator=(Reading const& r);

@@ -10,6 +10,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(Threads REQUIRED)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
@@ -22,4 +23,5 @@ target_link_libraries(
   ${PROJECT_NAME}
   BobCore
   Eigen3::Eigen
+  ${CMAKE_THREAD_LIBS_INIT}
 )

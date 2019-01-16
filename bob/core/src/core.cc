@@ -29,11 +29,6 @@
 #include <stdexcept>
 
 namespace bob {
-  void Core::usage(std::string opts) const {
-    show_logo();
-    std::cout << opts << std::endl;
-  }
-
   void Core::show_logo() const {
     std::cout << bob_logo << std::endl;
     std::cout << "Version: " << appversion << std::endl;

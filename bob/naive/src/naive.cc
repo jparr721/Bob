@@ -18,28 +18,28 @@ namespace bob {
     std::vector<Reading> outputs;
 
     float current_glucose, current_carbs;
-    int meal_count = profile->meals.size();
     int days = profile->days;
     int time = profile->time_between_meals;
-    std::string input = "0.01";
 
     for (int i = 0; i < days; ++i) {
       for (int j = 1; j < time; ++j) {
-        auto f = std::async(std::launch::async, [&] {
+        auto f = std::async(std::launch::async, [] {
+          std::string input = "0.01";
           if (std::cin >> input) {
             return std::stod(input);
-          }
+          } else { return std::stod(input); }
         });
 
-        while(f.wait_for(std::chrono::seconds(2)) != std::future_status::ready) {
+        if(f.wait_for(std::chrono::seconds(2)) != std::future_status::ready) {
           std::cout << "Waiting for input on main thread..." << std::endl;
         }
 
-        std::cout << "Got food input of: " << f.get() << "g of carbs" << std::endl;
+        auto input = f.get();
+        std::cout << "Got food input of: " << input << "g of carbs" << std::endl;
         Reading r;
 
         current_glucose = glucose_diffusion(
-           profile->meals[std::fmod(i, meal_count)],
+           input,
            profile->glucose,
            profile->irr,
            profile->gly_idx,
@@ -47,7 +47,7 @@ namespace bob {
         profile->glucose = current_glucose;
 
         current_carbs = carbohydrate_diffusion(
-          profile->meals[std::fmod(i, meal_count)],
+          input,
           profile->gly_idx,
           j);
         profile->carbs = current_carbs;

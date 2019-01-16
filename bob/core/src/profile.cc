@@ -28,14 +28,11 @@ namespace bob {
       glucose == p.glucose;
   }
 
-  std::string Profile::make_run_stats() const {
-    std::stringstream stats;
-    stats << "\n\nThanks for stopping by! Here's the run agenda for today:\n"
-      << "Time between meals: " << time_between_meals << " minutes\n"
-      << "Total runtime (in days): " << days << "\n"
-      << "Diabetes: " << has_diabetes << "\n";
-
-    return stats.str();
+  void Profile::show_run_stats() const {
+    std::cout << "\n\nThanks for stopping by! Here's the run agenda for today:" << std::endl;
+    std::cout << "Time between meals: " << time_between_meals << " minutes" << std::endl;
+    std::cout << "Total runtime (in days): " << days << std::endl;
+    std::cout  << "Diabetes: " << has_diabetes << std::endl;
   }
 
   std::ostream& operator<<(std::ostream& os, Profile const& p) {

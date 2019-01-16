@@ -42,13 +42,13 @@ namespace bob {
       void modify_insulin_bolus(double bolus);
       void modify_glycemic_index(double gly_idx);
       void operator=(Profile const& p);
+      void show_run_stats() const;
 
       bool operator==(Profile const& p) const;
       bool acceptable_glucose();
 
       double modulate_irr(double glucose);
 
-      std::string make_run_stats() const;
 
       friend std::ostream& operator<<(std::ostream& os, Profile const& p);
     private:

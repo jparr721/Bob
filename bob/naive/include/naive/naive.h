@@ -11,7 +11,13 @@ namespace bob {
     public:
       const std::string OPTS = "Bob Naive\n usage: BobNaive <profile_path>";
 
-      void cycle();
+      void calculate(
+          double input,
+          std::vector<Reading>& outputs,
+          std::unique_ptr<Profile> const& profile,
+          int current_time_step,
+          float& current_glucose,
+          float& current_carbs);
 
       int simulation(int argc, char** argv);
 

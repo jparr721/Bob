@@ -26,11 +26,11 @@ namespace bob {
     Reading r;
     std::stringstream os;
     os << "{ " <<
-    r.glucose <<
+    r.glucose << " glucose"
     ", " <<
-    r.carbs <<
+    r.carbs << " carbs"
     ", " <<
-    r.time <<
+    r.time << " minutes"
     " }";
 
     return os.str();
@@ -38,12 +38,12 @@ namespace bob {
 
   std::ostream& operator<<(std::ostream& os, Reading const& r) {
     os << "{ " <<
-      r.glucose <<
-      ", " <<
-      r.carbs <<
-      ", " <<
-      r.time <<
-      " }";
+    r.glucose << " glucose"
+    ", " <<
+    r.carbs << " carbs"
+    ", " <<
+    r.time << " minutes"
+    " }";
 
     return os;
   }

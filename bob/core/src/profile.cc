@@ -71,8 +71,8 @@ namespace bob {
       glucose = std::stof(initial_stats[3]);
       irr = std::stof(initial_stats[4]);
       gly_idx = std::stof(initial_stats[5]);
-      interval = std::stoi(initial_stats[6]);
-      has_diabetes = u.string_to_bool(initial_stats[7]);
+      has_diabetes = u.string_to_bool(initial_stats[6]);
+      interval = std::stoi(initial_stats[7]);
       days = std::stoi(initial_stats[8]);
     } catch (std::out_of_range const& oor) {
       std::cerr << "Invalid number of initial configs supplied, check your config file" << std::endl;
@@ -118,19 +118,25 @@ namespace bob {
   }
 
   double Profile::modulate_irr(double glucose) {
+    double irr_multiplier{0.0};
+
     if (glucose >= maximum_upper_threshold)
-      return irr * pow(standard_bolus_positive_multiplier, 2);
+      irr_multiplier = irr * pow(standard_bolus_positive_multiplier, 2);
     else if (glucose < maximum_upper_threshold &&
              glucose >= upper_threshold)
-      return irr * standard_bolus_positive_multiplier;
+      irr_multiplier = irr * standard_bolus_positive_multiplier;
     else if (glucose <= maximum_lower_threshold)
-      return irr * pow(standard_bolus_negative_multiplier, 2);
+      irr_multiplier = irr * pow(standard_bolus_negative_multiplier, 2);
     else
-      return irr * standard_bolus_negative_multiplier;
+      irr_multiplier = irr * standard_bolus_negative_multiplier;
+
+    return irr_multiplier <= 0.05
+      ? irr_multiplier
+      : std::fmod(irr_multiplier, 0.05);
   }
 
   bool Profile::acceptable_glucose() {
-    return glucose >= 75 && glucose >= 105;
+    return glucose >= 55 && glucose <= 135;
   }
 
   void Profile::modify_insulin_bolus(double bolus) {

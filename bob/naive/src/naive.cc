@@ -2,6 +2,7 @@
 #include <core/util.h>
 
 #include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <cmath>
 #include <future>
@@ -20,16 +21,18 @@ namespace bob {
       float& current_glucose,
       float& current_carbs) {
     Reading r;
+    input = input + profile->carbs;
     current_glucose = glucose_diffusion(
-       input,
+       30,
        profile->glucose,
-       profile->irr,
+       0.0224,
        profile->gly_idx,
        current_time_step);
+    std::cout << current_glucose << std::endl;
     profile->glucose = current_glucose;
 
     current_carbs = carbohydrate_diffusion(
-      input,
+      30,
       profile->gly_idx,
       current_time_step);
     profile->carbs = current_carbs;
@@ -38,6 +41,7 @@ namespace bob {
       double profile_glucose = profile->glucose;
       profile->irr = profile->modulate_irr(profile_glucose);
     }
+    std::cout << profile->irr << std::endl;
 
     auto reading = r.make_reading(profile, current_time_step);
     std::cout << reading << std::endl;
@@ -48,27 +52,23 @@ namespace bob {
     profile->show_run_stats();
     show_logo();
     std::vector<Reading> outputs;
+    std::atomic<double> input{0.001};
+    std::atomic<bool> running{true};
 
     float current_glucose, current_carbs;
     int days = profile->days * 24 * 60;
 
     for (int current_time = 1; current_time < days; ++current_time) {
-      auto f = std::async(std::launch::async, [] {
-        std::string input = "0.01";
-        if (std::cin >> input) {
-          return std::stod(input);
-        } else { return std::stod(input); }
+      std::thread stdin_poll([&input, &running] {
+        double new_value;
+        std::cin >> new_value;
+        input = new_value;
       });
 
-      if (f.wait_for(std::chrono::seconds(1)) == std::future_status::ready) {
-        auto input = f.get();
-        std::cout << "Got food input of: " << input << "g of carbs" << std::endl;
+      calculate(input.load(), outputs, profile, current_time, current_glucose, current_carbs);
 
-        calculate(input, outputs, profile, current_time, current_glucose, current_carbs);
-      } else {
-        std::cout << "No input provided, using default" << std::endl;
-        calculate(0.001, outputs, profile, current_time, current_glucose, current_carbs);
-      }
+      running = false;
+      stdin_poll.join();
     }
 
     return outputs;
@@ -81,9 +81,12 @@ namespace bob {
       return EXIT_SUCCESS;
     }
 
-    std::unique_ptr<Profile> p(new Profile(std::string(argv[1])));
-    std::vector<Reading> outputs = engine(p);
-    std::cout << outputs[0] << std::endl;
+    /* std::unique_ptr<Profile> p(new Profile(std::string(argv[1]))); */
+    /* std::vector<Reading> outputs = engine(p); */
+    /* std::cout << outputs[0] << std::endl; */
+    for (int i = 1; i < 180; ++i) {
+      std::cout << glucose_diffusion(127.17, 90, 0.0224, 0.0453, i) << std::endl;
+    }
 
     return EXIT_SUCCESS;
   }

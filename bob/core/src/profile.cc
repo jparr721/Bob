@@ -130,7 +130,7 @@ namespace bob {
   }
 
   bool Profile::acceptable_glucose() {
-    return glucose >= 55 && glucose <= 135;
+    return glucose >= 75 && glucose <= 105;
   }
 
   void Profile::modify_insulin_bolus(double bolus) {

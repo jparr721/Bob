@@ -30,16 +30,18 @@ namespace bob {
                                      std::istream_iterator<std::string>{}};
   }
 
-  void Util::write_to_file(std::vector<std::string> output_vector) const {
+  void Util::write_to_file(std::vector<Reading> output_vector) const {
     std::ostringstream filename;
 
     // Get time of current run
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
-    filename << "Run" << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d-%X");
+    filename << "Run-" << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d-%X.csv");
 
-    std::ofstream runfile(filename.str());
+    std::ofstream output_file("../output/" + filename.str());
+    std::ostream_iterator<Reading> runfile(output_file, "\n");
+    std::copy(output_vector.begin(), output_vector.end(), runfile);
 
     std::cout << "Done writing to file..." << std::endl;
   }

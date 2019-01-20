@@ -21,9 +21,9 @@ namespace bob {
       float& current_glucose,
       float& current_carbs) {
     Reading r;
-    std::cout << profile->carbs << std::endl;
     input = input + profile->carbs;
     std::cout << input << std::endl;
+
     current_glucose = glucose_diffusion(
        input,
        60,
@@ -56,14 +56,27 @@ namespace bob {
     std::atomic<bool> running{true};
 
     float current_glucose, current_carbs;
-    int days = profile->days * 24 * 60;
+    // Run for 3 hours
+    int days = profile->days * 3 * 60;
+    bool breaker = false;
 
     for (int current_time = 1; current_time < days; ++current_time) {
-      std::thread stdin_poll([&input, &running] {
-        double new_value;
+      std::thread stdin_poll([&input, &running, &breaker] {
+        std::string new_value = "";
         std::cin >> new_value;
-        input = new_value;
+        if (new_value.compare("quit") == 0) {
+          std::cout << "Breaker called" << std::endl;
+          breaker = true;
+        }
+        else { input = std::stod(new_value); }
       });
+      if (breaker) {
+        std::cout << "breaker flag" << std::endl;
+        std::cout << "Killing the processes" << std::endl;
+        running = false;
+        stdin_poll.join();
+        break;
+      }
 
       calculate(input.load(), outputs, profile, current_time, current_glucose, current_carbs);
 
@@ -71,10 +84,12 @@ namespace bob {
       stdin_poll.join();
     }
 
+    std::cout << "All done!" << std::endl;
     return outputs;
   }
 
   int Naive::simulation(int argc, char** argv) {
+    Util u;
     if (argc < 2) {
       show_logo();
       std::cout << OPTS << std::endl;
@@ -83,7 +98,8 @@ namespace bob {
 
     std::unique_ptr<Profile> p(new Profile(std::string(argv[1])));
     std::vector<Reading> outputs = engine(p);
-    std::cout << outputs[0] << std::endl;
+    u.write_to_file(outputs);
+
     /* for (int i = 1; i < 180; ++i) { */
     /*   std::cout << glucose_diffusion(127.17, 90, 0.0224, 0.0453, i) << std::endl; */
     /* } */

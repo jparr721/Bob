@@ -3,11 +3,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <core/reading.h>
 
 namespace bob {
   class Util {
     public:
-      void write_to_file(std::vector<std::string> output_vector) const;
+      void write_to_file(std::vector<Reading> output_vector) const;
 
       template<typename T>
       void log(std::string label, T data) const {

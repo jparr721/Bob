@@ -6,6 +6,7 @@ namespace bob {
     reading->glucose = p->glucose;
     reading->carbs = p->carbs;
     reading->time = time;
+    reading->irr = p->irr;
 
     return *reading;
   }
@@ -13,24 +14,28 @@ namespace bob {
   bool Reading::operator==(Reading const& r) const {
     return glucose == r.glucose &&
       carbs == r.carbs &&
-      time == r.time;
+      time == r.time &&
+      irr == r.irr;
   }
 
   void Reading::operator=(Reading const& r) {
     glucose = r.glucose;
     carbs = r.carbs;
     time = r.time;
+    irr = r.irr;
   }
 
   std::string Reading::to_string() {
     Reading r;
     std::stringstream os;
     os << "{ " <<
-    r.glucose << " glucose"
+    r.glucose << " glucose" <<
     ", " <<
-    r.carbs << " carbs"
+    r.carbs << " carbs" <<
     ", " <<
-    r.time << " minutes"
+    r.time << " minutes" <<
+    ", " <<
+    r.irr << " mg/dl" <<
     " }";
 
     return os.str();
@@ -43,6 +48,8 @@ namespace bob {
     r.carbs << " carbs"
     ", " <<
     r.time << " minutes"
+    ", " <<
+    r.irr << " mg/dl" <<
     " }";
 
     return os;

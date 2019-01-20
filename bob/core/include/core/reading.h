@@ -25,6 +25,7 @@ namespace bob {
     public:
       double glucose;
       double carbs;
+      double irr;
       int time;
 
       Reading make_reading(std::unique_ptr<Profile> const& p, int time);

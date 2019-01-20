@@ -79,12 +79,6 @@ namespace bob {
       return;
     }
     std::cout << "items unpacked, moving on with setup..." << std::endl;
-    // Cannot set to 0 or it breaks the algorithm
-    if (has_diabetes) {
-      std::cout << "Diabetes detected changing irr to 0.0001" << std::endl;
-      irr = 0.0001;
-      std::cout << "irr is now: " << irr << std::endl;
-    }
 
     // Load in the thresholds
     std::vector<std::string> thresholds = u.split_by_space(lines[1]);

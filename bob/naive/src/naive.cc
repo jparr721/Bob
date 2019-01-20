@@ -21,18 +21,19 @@ namespace bob {
       float& current_glucose,
       float& current_carbs) {
     Reading r;
+    std::cout << profile->carbs << std::endl;
     input = input + profile->carbs;
+    std::cout << input << std::endl;
     current_glucose = glucose_diffusion(
-       30,
-       profile->glucose,
-       0.0224,
+       input,
+       60,
+       profile->irr,
        profile->gly_idx,
        current_time_step);
-    std::cout << current_glucose << std::endl;
     profile->glucose = current_glucose;
 
     current_carbs = carbohydrate_diffusion(
-      30,
+      input,
       profile->gly_idx,
       current_time_step);
     profile->carbs = current_carbs;
@@ -41,7 +42,6 @@ namespace bob {
       double profile_glucose = profile->glucose;
       profile->irr = profile->modulate_irr(profile_glucose);
     }
-    std::cout << profile->irr << std::endl;
 
     auto reading = r.make_reading(profile, current_time_step);
     std::cout << reading << std::endl;
@@ -81,12 +81,12 @@ namespace bob {
       return EXIT_SUCCESS;
     }
 
-    /* std::unique_ptr<Profile> p(new Profile(std::string(argv[1]))); */
-    /* std::vector<Reading> outputs = engine(p); */
-    /* std::cout << outputs[0] << std::endl; */
-    for (int i = 1; i < 180; ++i) {
-      std::cout << glucose_diffusion(127.17, 90, 0.0224, 0.0453, i) << std::endl;
-    }
+    std::unique_ptr<Profile> p(new Profile(std::string(argv[1])));
+    std::vector<Reading> outputs = engine(p);
+    std::cout << outputs[0] << std::endl;
+    /* for (int i = 1; i < 180; ++i) { */
+    /*   std::cout << glucose_diffusion(127.17, 90, 0.0224, 0.0453, i) << std::endl; */
+    /* } */
 
     return EXIT_SUCCESS;
   }

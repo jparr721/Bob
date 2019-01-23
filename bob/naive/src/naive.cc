@@ -30,7 +30,7 @@ namespace bob {
        profile->irr,
        profile->gly_idx,
        current_time_step);
-    profile->glucose = current_glucose;
+    profile->glucose = std::fmod(current_glucose, 2000);
 
     current_carbs = carbohydrate_diffusion(
       input,

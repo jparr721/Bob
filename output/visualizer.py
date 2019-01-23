@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import sys
 
 
 def visualize():
-    frame = pd.read_csv('./Run-2019-01-23-14:26:42.csv')
+    the_file = sys.argv[1]
+    frame = pd.read_csv(the_file)
     x = frame['time']
     y = frame['glucose']
     x = list(x)

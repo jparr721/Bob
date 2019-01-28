@@ -42,6 +42,4 @@ namespace bob {
     return glucose - (carbs * (gly_index / irr - gly_index)) * (std::exp(
           -gly_index * time) - std::exp(-irr * time));
   }
-
-
 } // namespace bob

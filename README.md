@@ -1,4 +1,4 @@
-# Bob
+# Bob -- Deprecated, Research is now in [simglucose](https://github.com/jxx123/simglucose) inside of [Lazarus](https://github.com/jparr721/Lazarus)
 Bob is a compartment simulation of a diabetes patient to provide continuous inputs to a deep reinforcement learning algorithm as apart of the Lazarus research project. Bob also allows for the modular generation of two-compartment data via the use of base functionality that can be extended to different circumstances. You can also simply define profiles and take the outputs for study if you'd prefer to do it that way.
 
 ## Why?
